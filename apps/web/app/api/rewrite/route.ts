@@ -1,5 +1,5 @@
-import type { TonePreset, Platform, Mode } from '@tonewise/agents';
-import { toneOrchestrator } from '@tonewise/agents';
+import type { TonePreset, Platform, Mode } from '@how-to-talk-corporate/agents';
+import { toneOrchestrator } from '@how-to-talk-corporate/agents';
 import { Ratelimit } from '@upstash/ratelimit';
 import { Redis } from '@upstash/redis';
 

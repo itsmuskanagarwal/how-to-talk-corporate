@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRewriteStore } from '../store/rewrite';
-import type { TonePreset } from '@tonewise/agents';
+import type { TonePreset } from '@how-to-talk-corporate/agents';
 
 const PRESET_LABELS: Record<TonePreset, string> = {
   'humble-polite': 'Humble & Polite',

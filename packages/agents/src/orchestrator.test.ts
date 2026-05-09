@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { toneOrchestrator } from './agents/orchestrator.js';
-import { setClient, type AnthropicClient } from './client.js';
+import { toneOrchestrator } from './agents/orchestrator';
+import { setClient, type AnthropicClient } from './client';
 
 interface FakeCall {
   model: string;

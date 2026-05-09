@@ -1,7 +1,7 @@
-# @tonewise/agents
+# @how-to-talk-corporate/agents
 
-Shared agent pipeline for ToneWise. Consumed by both `@tonewise/web` and
-`@tonewise/extension` via workspace dependency.
+Shared agent pipeline for How to Talk Corporate. Consumed by both `@how-to-talk-corporate/web` and
+`@how-to-talk-corporate/extension` via workspace dependency.
 
 ## Phase ownership
 

@@ -1,4 +1,4 @@
-import type { TonePreset } from '../types/index.js';
+import type { TonePreset } from '../types/index';
 
 export interface TonePromptSpec {
   systemPrompt: string;

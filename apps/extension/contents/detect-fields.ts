@@ -27,7 +27,7 @@ let activeField: HTMLElement | null = null;
 function createButton(): HTMLButtonElement {
   const btn = document.createElement('button');
   btn.textContent = 'TW';
-  btn.title = 'ToneWise — rewrite this message';
+  btn.title = 'How to Talk Corporate — rewrite this message';
   Object.assign(btn.style, {
     position: 'absolute',
     zIndex: '9999',

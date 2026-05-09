@@ -3,7 +3,7 @@ import type { ReactNode } from 'react';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'ToneWise — Workplace communication, calibrated.',
+  title: 'How to Talk Corporate — Workplace communication, calibrated.',
   description:
     'Rewrite Slack, email, and Jira messages with the right tone in seconds. No login. 10 free rewrites a day.',
 };

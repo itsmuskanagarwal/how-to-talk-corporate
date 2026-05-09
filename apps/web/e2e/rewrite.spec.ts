@@ -1,11 +1,11 @@
 import { expect, test } from '@playwright/test';
 
-test.describe('ToneWise P2 — Web App UI', () => {
+test.describe('How to Talk Corporate P2 — Web App UI', () => {
   test('shows the main rewrite interface on load', async ({ page }) => {
     await page.goto('/');
 
     // Header with branding
-    await expect(page.locator('h1')).toContainText('ToneWise');
+    await expect(page.locator('h1')).toContainText('How to Talk Corporate');
 
     // Tone preset selector with 5 options
     const presets = page.getByRole('radio');

@@ -1,4 +1,4 @@
-import { getClient, DEFAULT_MODEL, extractText } from '../client.js';
+import { getClient, DEFAULT_MODEL, extractText } from '../client';
 
 const SYSTEM_PROMPT =
   'You are a grammar and spelling proofreader. Fix only typos, misspellings, ' +

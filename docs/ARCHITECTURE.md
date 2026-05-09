@@ -1,4 +1,4 @@
-# ToneWise — Architecture
+# How to Talk Corporate — Architecture
 
 > Companion to the Master Product & Engineering Document (v1.0). This doc captures
 > the engineering-level decisions that flow from that spec, plus anything decided
@@ -74,7 +74,7 @@ tonewise/
 | Package manager | pnpm 9 + workspaces          | Disk-efficient, deterministic, first-class monorepo |
 | Language        | TypeScript 5.5 (strict)      | One std for both surfaces                           |
 
-## 4. Pipeline contract (`@tonewise/agents`)
+## 4. Pipeline contract (`@how-to-talk-corporate/agents`)
 
 ```ts
 // apps/web/app/api/rewrite/route.ts (P1, sketch only)

@@ -1,4 +1,4 @@
-import type { Platform, TonePreset } from '../types/index.js';
+import type { Platform, TonePreset } from '../types/index';
 
 export interface FewShotExample {
   input: string;
