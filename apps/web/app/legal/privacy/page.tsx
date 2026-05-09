@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Privacy Policy — ToneWise',
+  title: 'Privacy Policy — How to Talk Corporate',
 };
 
 export default function PrivacyPage() {
@@ -12,8 +12,8 @@ export default function PrivacyPage() {
 
       <h2>1. What we collect</h2>
       <p>
-        ToneWise is designed to work without an account. We collect only the data necessary to
-        enforce the free tier and prevent abuse:
+        How to Talk Corporate is designed to work without an account. We collect only the data
+        necessary to enforce the free tier and prevent abuse:
       </p>
       <ul>
         <li>
@@ -45,8 +45,8 @@ export default function PrivacyPage() {
         When you submit a message for rewriting, it is sent to our rewrite API, processed by the
         ToneOrchestrator agent pipeline (powered by Anthropic Claude Haiku), and the rewritten
         result is returned to you. The message content is <strong>never stored or logged</strong> by
-        ToneWise. It is processed in memory only and discarded immediately after the response is
-        returned.
+        How to Talk Corporate. It is processed in memory only and discarded immediately after the
+        response is returned.
       </p>
       <p>
         The Anthropic API receives your message for the purpose of performing the rewrite. Anthropic
@@ -59,8 +59,8 @@ export default function PrivacyPage() {
 
       <h2>4. Cookies and local storage</h2>
       <p>
-        ToneWise does <strong>not</strong> use cookies or any form of client-side tracking. The
-        browser extension may use{' '}
+        How to Talk Corporate does <strong>not</strong> use cookies or any form of client-side
+        tracking. The browser extension may use{' '}
         <code className="rounded bg-paper-3 px-1 py-0.5 text-sm">chrome.storage.local</code> to
         persist your remaining daily usage count so the counter survives a browser restart. This
         data never leaves your device. The web app stores nothing on the client.
@@ -97,16 +97,16 @@ export default function PrivacyPage() {
       <h2>6. Your rights</h2>
       <p>
         Under the GDPR (EU), India DPDP Act 2023, and CCPA (California), you have the right to
-        access, correct, or delete personal data. Because ToneWise stores only hashed,
+        access, correct, or delete personal data. Because How to Talk Corporate stores only hashed,
         non-reversible identifiers, we cannot identify or locate data belonging to a specific
         individual. However, all stored data is automatically purged within 24 hours.
       </p>
 
       <h2>7. Third-party services</h2>
       <p>
-        ToneWise uses the following third-party services. Each processes only the data described
-        above and is contractually prohibited from using it for any purpose other than providing the
-        service:
+        How to Talk Corporate uses the following third-party services. Each processes only the data
+        described above and is contractually prohibited from using it for any purpose other than
+        providing the service:
       </p>
       <ul>
         <li>

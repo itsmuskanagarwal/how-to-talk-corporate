@@ -1,0 +1,1412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ToneWise — Master Product & Engineering Document</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Fraunces:ital,wght@0,300;0,600;0,900;1,300&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0f0e0d;
+    --ink-2: #3a3832;
+    --ink-3: #7a7670;
+    --paper: #faf9f7;
+    --paper-2: #f0ede8;
+    --paper-3: #e4e0d8;
+    --accent: #c84b1e;
+    --accent-2: #1e6bc8;
+    --accent-3: #1e8c5a;
+    --accent-warm: #d4870a;
+    --mono: 'IBM Plex Mono', monospace;
+    --serif: 'Fraunces', serif;
+    --sans: 'DM Sans', sans-serif;
+    --max: 900px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.75;
+    padding: 0;
+  }
+
+  /* COVER */
+  .cover {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 80px 60px 60px;
+    position: relative;
+    overflow: hidden;
+  }
+  .cover::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 400px; height: 400px;
+    border: 60px solid rgba(200,75,30,0.15);
+    border-radius: 50%;
+  }
+  .cover-tag {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+  .cover h1 {
+    font-family: var(--serif);
+    font-size: 72px;
+    font-weight: 900;
+    line-height: 1;
+    letter-spacing: -2px;
+    margin-bottom: 8px;
+  }
+  .cover h1 span { color: var(--accent); }
+  .cover-sub {
+    font-family: var(--serif);
+    font-size: 22px;
+    font-weight: 300;
+    font-style: italic;
+    color: rgba(250,249,247,0.65);
+    margin-bottom: 40px;
+  }
+  .cover-meta {
+    display: flex;
+    gap: 40px;
+    flex-wrap: wrap;
+  }
+  .cover-meta-item {
+    font-family: var(--mono);
+    font-size: 11px;
+  }
+  .cover-meta-item .label { color: rgba(250,249,247,0.4); margin-bottom: 4px; }
+  .cover-meta-item .val { color: var(--paper); font-size: 13px; }
+
+  /* NAV / TOC */
+  .toc {
+    background: var(--ink-2);
+    color: var(--paper-3);
+    padding: 32px 60px;
+  }
+  .toc-title {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 20px;
+  }
+  .toc-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 6px;
+  }
+  .toc-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 0;
+    font-size: 13px;
+    color: var(--paper-3);
+    text-decoration: none;
+    border-bottom: 0.5px solid rgba(255,255,255,0.07);
+  }
+  .toc-item:hover { color: var(--paper); }
+  .toc-num {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--accent);
+    min-width: 24px;
+  }
+
+  /* MAIN LAYOUT */
+  .main { max-width: var(--max); margin: 0 auto; padding: 60px 40px; }
+
+  /* SECTION */
+  .section { margin-bottom: 72px; }
+
+  .section-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    margin-bottom: 32px;
+    padding-bottom: 16px;
+    border-bottom: 0.5px solid var(--paper-3);
+  }
+  .section-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    padding-top: 6px;
+    min-width: 28px;
+    letter-spacing: 0.05em;
+  }
+  .section h2 {
+    font-family: var(--serif);
+    font-size: 36px;
+    font-weight: 900;
+    line-height: 1.1;
+    letter-spacing: -0.5px;
+  }
+
+  .section h3 {
+    font-family: var(--serif);
+    font-size: 22px;
+    font-weight: 600;
+    margin: 32px 0 12px;
+    color: var(--ink);
+  }
+
+  .section h4 {
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin: 24px 0 8px;
+  }
+
+  p { margin-bottom: 14px; color: var(--ink-2); }
+
+  /* CALLOUT */
+  .callout {
+    border-left: 3px solid var(--accent);
+    background: var(--paper-2);
+    padding: 16px 20px;
+    margin: 24px 0;
+    border-radius: 0 6px 6px 0;
+  }
+  .callout.blue { border-left-color: var(--accent-2); }
+  .callout.green { border-left-color: var(--accent-3); }
+  .callout.amber { border-left-color: var(--accent-warm); }
+  .callout-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+  .callout.blue .callout-label { color: var(--accent-2); }
+  .callout.green .callout-label { color: var(--accent-3); }
+  .callout.amber .callout-label { color: var(--accent-warm); }
+  .callout p { margin: 0; font-size: 14px; }
+
+  /* CODE BLOCK */
+  .code-block {
+    background: var(--ink);
+    color: #a8e6cf;
+    font-family: var(--mono);
+    font-size: 12px;
+    line-height: 1.7;
+    padding: 20px 24px;
+    border-radius: 8px;
+    margin: 20px 0;
+    overflow-x: auto;
+  }
+  .code-block .comment { color: #6b7280; }
+  .code-block .keyword { color: #c084fc; }
+  .code-block .string { color: #fbbf24; }
+  .code-block .fn { color: #67e8f9; }
+
+  /* ROLE CARD */
+  .role-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+    margin: 24px 0;
+  }
+  .role-card {
+    background: var(--paper);
+    border: 0.5px solid var(--paper-3);
+    border-radius: 12px;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+  .role-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+  .role-card.design::before { background: #c084fc; }
+  .role-card.eng-lead::before { background: var(--accent); }
+  .role-card.frontend::before { background: var(--accent-2); }
+  .role-card.backend::before { background: var(--accent-3); }
+  .role-card.pm::before { background: var(--accent-warm); }
+  .role-card.qa::before { background: #e879f9; }
+  .role-card.research::before { background: #38bdf8; }
+  .role-card.compliance::before { background: #fb923c; }
+  .role-card.writer::before { background: #4ade80; }
+
+  .role-icon {
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    background: var(--paper-2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    margin-bottom: 12px;
+  }
+  .role-title {
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .role-claude {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+  .role-duties {
+    list-style: none;
+    padding: 0;
+  }
+  .role-duties li {
+    font-size: 12.5px;
+    color: var(--ink-3);
+    padding: 3px 0;
+    display: flex;
+    gap: 8px;
+  }
+  .role-duties li::before {
+    content: '→';
+    color: var(--paper-3);
+    flex-shrink: 0;
+  }
+
+  /* PHASE TIMELINE */
+  .phases { margin: 24px 0; }
+  .phase {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 0;
+    position: relative;
+  }
+  .phase::before {
+    content: '';
+    position: absolute;
+    left: 23px;
+    top: 48px;
+    bottom: -4px;
+    width: 1px;
+    background: var(--paper-3);
+  }
+  .phase:last-child::before { display: none; }
+  .phase-dot {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: var(--paper-2);
+    border: 2px solid var(--paper-3);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--ink-3);
+    flex-shrink: 0;
+    margin-top: 8px;
+  }
+  .phase-body {
+    flex: 1;
+    background: var(--paper-2);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 16px;
+  }
+  .phase-title {
+    font-weight: 600;
+    font-size: 15px;
+    margin-bottom: 4px;
+  }
+  .phase-desc {
+    font-size: 13px;
+    color: var(--ink-3);
+    margin: 0;
+  }
+  .phase-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 10px;
+  }
+  .phase-tag {
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: var(--paper-3);
+    color: var(--ink-3);
+  }
+
+  /* FEATURE COMPARISON TABLE */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 13px;
+  }
+  th {
+    text-align: left;
+    font-weight: 600;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--paper-3);
+    background: var(--paper-2);
+  }
+  td {
+    padding: 10px 14px;
+    border-bottom: 0.5px solid var(--paper-3);
+    color: var(--ink-2);
+  }
+  tr:hover td { background: var(--paper-2); }
+
+  /* HOOK / SKILL / AGENT CARDS */
+  .artifact-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 12px;
+    margin: 20px 0;
+  }
+  .artifact-card {
+    background: var(--paper-2);
+    border: 0.5px solid var(--paper-3);
+    border-radius: 8px;
+    padding: 16px;
+  }
+  .artifact-type {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .artifact-type.hook { color: var(--accent-2); }
+  .artifact-type.skill { color: var(--accent-3); }
+  .artifact-type.agent { color: var(--accent); }
+  .artifact-type.subagent { color: var(--accent-warm); }
+  .artifact-name {
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: var(--ink);
+  }
+  .artifact-desc {
+    font-size: 12px;
+    color: var(--ink-3);
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  /* DIVIDER */
+  .divider {
+    border: none;
+    border-top: 0.5px solid var(--paper-3);
+    margin: 48px 0;
+  }
+
+  /* BADGE */
+  .badge {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .badge.red { background: #fef2f2; color: #991b1b; }
+  .badge.green { background: #f0fdf4; color: #166534; }
+  .badge.blue { background: #eff6ff; color: #1e40af; }
+  .badge.amber { background: #fffbeb; color: #92400e; }
+
+  /* FLOW DIAGRAM STYLES */
+  .flow {
+    background: var(--paper-2);
+    border-radius: 12px;
+    padding: 24px;
+    margin: 20px 0;
+    font-size: 13px;
+  }
+  .flow-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+  }
+  .flow-node {
+    background: var(--paper);
+    border: 0.5px solid var(--paper-3);
+    border-radius: 6px;
+    padding: 8px 14px;
+    font-family: var(--mono);
+    font-size: 11.5px;
+    color: var(--ink);
+  }
+  .flow-node.highlighted {
+    background: var(--ink);
+    color: var(--paper);
+    border-color: var(--ink);
+  }
+  .flow-arrow {
+    color: var(--ink-3);
+    font-size: 14px;
+  }
+  .flow-label {
+    font-size: 11px;
+    color: var(--ink-3);
+    font-style: italic;
+  }
+
+  /* FOOTER */
+  .footer {
+    background: var(--ink);
+    color: rgba(250,249,247,0.4);
+    padding: 32px 60px;
+    font-family: var(--mono);
+    font-size: 11px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .footer span { color: var(--paper); }
+
+  @media print {
+    .cover { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .section { page-break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div class="cover">
+  <div class="cover-tag">Master Product & Engineering Document · v1.0</div>
+  <h1>Tone<span>Wise</span></h1>
+  <p class="cover-sub">AI-Powered Workplace Communication Assistant — Zero Login, Free Tier, Production Grade</p>
+  <div class="cover-meta">
+    <div class="cover-meta-item">
+      <div class="label">Document Type</div>
+      <div class="val">Claude Code Pitch + Architecture Spec</div>
+    </div>
+    <div class="cover-meta-item">
+      <div class="label">Product Status</div>
+      <div class="val">Pre-Development · Concept Stage</div>
+    </div>
+    <div class="cover-meta-item">
+      <div class="label">Target Stack</div>
+      <div class="val">Claude API · Next.js · Edge Functions</div>
+    </div>
+    <div class="cover-meta-item">
+      <div class="label">Distribution</div>
+      <div class="val">Web App + Browser Extension</div>
+    </div>
+  </div>
+</div>
+
+<!-- TABLE OF CONTENTS -->
+<div class="toc">
+  <div class="toc-title">Table of Contents</div>
+  <div class="toc-grid">
+    <a class="toc-item" href="#s1"><span class="toc-num">01</span> Problem Statement</a>
+    <a class="toc-item" href="#s2"><span class="toc-num">02</span> Product Vision</a>
+    <a class="toc-item" href="#s3"><span class="toc-num">03</span> User Personas</a>
+    <a class="toc-item" href="#s4"><span class="toc-num">04</span> Core Feature Set</a>
+    <a class="toc-item" href="#s5"><span class="toc-num">05</span> Claude Code Architecture</a>
+    <a class="toc-item" href="#s6"><span class="toc-num">06</span> Hooks, Agents & Skills</a>
+    <a class="toc-item" href="#s7"><span class="toc-num">07</span> Rate Limiting & IP Strategy</a>
+    <a class="toc-item" href="#s8"><span class="toc-num">08</span> Team Roles & Claude's Persona Per Role</a>
+    <a class="toc-item" href="#s9"><span class="toc-num">09</span> Development Phases</a>
+    <a class="toc-item" href="#s10"><span class="toc-num">10</span> Claude Code Instructions Per Role</a>
+    <a class="toc-item" href="#s11"><span class="toc-num">11</span> Compliance & Ethics</a>
+    <a class="toc-item" href="#s12"><span class="toc-num">12</span> Success Metrics</a>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="main">
+
+<!-- SECTION 1 -->
+<div class="section" id="s1">
+  <div class="section-header">
+    <div class="section-num">01</div>
+    <h2>Problem Statement</h2>
+  </div>
+
+  <p>Every day, millions of cross-cultural knowledge workers — engineers, analysts, PMs — write dozens of messages in Slack, Teams, Gmail, and Jira. Many of them open a separate AI assistant, paste their draft, ask it to polish the tone, then copy it back. This context-switching is expensive, repetitive, and entirely unsolved by a single purpose-built product.</p>
+
+  <div class="callout">
+    <div class="callout-label">Real User Scenario</div>
+    <p>An Indian engineer working at an American firm writes: <em>"i already told you guys this is a bug it needs to be fixed today"</em> — and before hitting send, opens Copilot to rewrite it as professional, firm-but-respectful English. This happens 10–30 times a day per user. There is no dedicated, zero-friction tool for this.</p>
+  </div>
+
+  <h3>The gap this product fills</h3>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Current Behaviour</th>
+        <th>Pain Point</th>
+        <th>ToneWise Solves</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Open ChatGPT / Copilot tab</td>
+        <td>Context switch breaks flow</td>
+        <td>Inline in the same window</td>
+      </tr>
+      <tr>
+        <td>Write a long prompt every time</td>
+        <td>No memory of style preferences</td>
+        <td>One-click tone presets</td>
+      </tr>
+      <tr>
+        <td>General LLM makes it too formal</td>
+        <td>Loses the original point</td>
+        <td>Intent-preserving rewrite</td>
+      </tr>
+      <tr>
+        <td>No grammar check in context</td>
+        <td>Embarrassing typos sent</td>
+        <td>Grammar layer built in</td>
+      </tr>
+      <tr>
+        <td>Requires login / subscription</td>
+        <td>Barrier to adoption</td>
+        <td>10 free daily uses, no login</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<hr class="divider">
+
+<!-- SECTION 2 -->
+<div class="section" id="s2">
+  <div class="section-header">
+    <div class="section-num">02</div>
+    <h2>Product Vision</h2>
+  </div>
+
+  <p>ToneWise is a zero-login, IP-rate-limited web application and browser extension that rewrites workplace messages — Slack, Teams, Gmail, Jira comments — with the correct tone for the context. It operates as a lightweight AI layer on top of free-tier LLMs, delivering 10 rewrites per user per 24-hour window with no account required.</p>
+
+  <div class="callout blue">
+    <div class="callout-label">North Star Statement</div>
+    <p>Every professional should be able to communicate confidently across cultural and linguistic barriers without switching contexts, installing enterprise software, or paying a subscription — starting on day one.</p>
+  </div>
+
+  <h3>Two core interaction modes</h3>
+
+  <h4>Mode A — Quick Rewrite</h4>
+  <div class="flow">
+    <div class="flow-row">
+      <div class="flow-node highlighted">User pastes message</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-node">Selects tone preset</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-node">One-click rewrite</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-node highlighted">Copy to clipboard</div>
+    </div>
+    <p class="flow-label">Avg turnaround: &lt; 3 seconds · Zero follow-up needed</p>
+  </div>
+
+  <h4>Mode B — Clarify & Rewrite (Collaborative)</h4>
+  <div class="flow">
+    <div class="flow-row">
+      <div class="flow-node highlighted">User pastes complex message</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-node">Agent reads intent</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-node">Asks 1–2 clarifying Qs</div>
+    </div>
+    <div class="flow-row">
+      <div class="flow-node">User answers briefly</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-node">Produces polished message</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-node highlighted">Copy or iterate</div>
+    </div>
+    <p class="flow-label">Used when original text is ambiguous or multi-layered</p>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- SECTION 3 -->
+<div class="section" id="s3">
+  <div class="section-header">
+    <div class="section-num">03</div>
+    <h2>User Personas</h2>
+  </div>
+
+  <div class="role-grid">
+    <div class="role-card design">
+      <div class="role-icon">👩‍💻</div>
+      <div class="role-title">The Cross-Cultural Engineer</div>
+      <div class="role-claude">Primary User</div>
+      <ul class="role-duties">
+        <li>Non-native English speaker, fluent but cultural nuance gaps</li>
+        <li>Works for US/EU firm from India, Philippines, Eastern Europe</li>
+        <li>Writes Slack, Jira, PR comments 20–50 times/day</li>
+        <li>Wants confidence, not a grammar lesson</li>
+      </ul>
+    </div>
+    <div class="role-card frontend">
+      <div class="role-icon">🧑‍💼</div>
+      <div class="role-title">The Non-Native Manager</div>
+      <div class="role-claude">Secondary User</div>
+      <ul class="role-duties">
+        <li>Leads a cross-geography team</li>
+        <li>Needs email tone to be firm but not rude</li>
+        <li>Values brevity and professionalism</li>
+        <li>May upgrade to paid tier for unlimited use</li>
+      </ul>
+    </div>
+    <div class="role-card backend">
+      <div class="role-icon">🧑‍🎓</div>
+      <div class="role-title">The New Joiner</div>
+      <div class="role-claude">Growth User</div>
+      <ul class="role-duties">
+        <li>First corporate job, anxious about tone</li>
+        <li>Needs to write to senior stakeholders</li>
+        <li>10 free messages/day is sufficient to start</li>
+        <li>High potential to share with team</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- SECTION 4 -->
+<div class="section" id="s4">
+  <div class="section-header">
+    <div class="section-num">04</div>
+    <h2>Core Feature Set</h2>
+  </div>
+
+  <h3>Tone Presets (V1)</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Preset Name</th>
+        <th>Use Case</th>
+        <th>Output Quality</th>
+        <th>Assertiveness</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Humble & Polite</strong></td>
+        <td>Asking for help, checking in</td>
+        <td>Warm, professional</td>
+        <td>Low–Medium</td>
+      </tr>
+      <tr>
+        <td><strong>Confident & Direct</strong></td>
+        <td>Pushing back, taking a stand</td>
+        <td>Firm, not aggressive</td>
+        <td>High</td>
+      </tr>
+      <tr>
+        <td><strong>Clarifying</strong></td>
+        <td>When you've confused the other person</td>
+        <td>Clear, structured</td>
+        <td>Medium</td>
+      </tr>
+      <tr>
+        <td><strong>Empathetic Nudge</strong></td>
+        <td>Following up on blocked items</td>
+        <td>Warm urgency</td>
+        <td>Medium</td>
+      </tr>
+      <tr>
+        <td><strong>Grammar Fix Only</strong></td>
+        <td>When tone is fine, just fix errors</td>
+        <td>Corrected, unchanged style</td>
+        <td>Preserved</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Context Tags (V2)</h3>
+  <p>Users specify where the message is going to get platform-appropriate output length and formality:</p>
+  <div class="artifact-grid">
+    <div class="artifact-card">
+      <div class="artifact-type hook">Platform Context</div>
+      <div class="artifact-name">Slack / Teams</div>
+      <p class="artifact-desc">Casual register, shorter sentences, no salutation needed, conversational but professional.</p>
+    </div>
+    <div class="artifact-card">
+      <div class="artifact-type hook">Platform Context</div>
+      <div class="artifact-name">Gmail / Outlook</div>
+      <p class="artifact-desc">Full email structure, salutation, sign-off, medium formality, paragraph coherence.</p>
+    </div>
+    <div class="artifact-card">
+      <div class="artifact-type hook">Platform Context</div>
+      <div class="artifact-name">Jira / Linear</div>
+      <p class="artifact-desc">Ticket-appropriate language, structured, concise, avoids emotion, action-oriented.</p>
+    </div>
+    <div class="artifact-card">
+      <div class="artifact-type hook">Platform Context</div>
+      <div class="artifact-name">LinkedIn DM</div>
+      <p class="artifact-desc">Semi-formal, networking-appropriate, brief, no inside jargon.</p>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- SECTION 5 -->
+<div class="section" id="s5">
+  <div class="section-header">
+    <div class="section-num">05</div>
+    <h2>Claude Code Architecture</h2>
+  </div>
+
+  <div class="callout amber">
+    <div class="callout-label">How Claude Code Is Used Here</div>
+    <p>Claude Code acts as the senior agentic developer orchestrating this entire project. It will perform research, generate architecture, author tests, write production code, and spin up sub-agents for domain-specific tasks — all through a single conversational interface in the terminal.</p>
+  </div>
+
+  <h3>System Architecture Overview</h3>
+
+  <div class="flow">
+    <div class="flow-row">
+      <div class="flow-node highlighted">Browser Extension / Web App</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-node">Edge API Route (Next.js)</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-node">IP Rate Limiter</div>
+    </div>
+    <div class="flow-row">
+      <span class="flow-arrow" style="margin-left:40px">↓</span>
+    </div>
+    <div class="flow-row">
+      <div class="flow-node">Tone Orchestration Agent</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-node">Intent Classifier Sub-Agent</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-node">Rewrite Sub-Agent</div>
+    </div>
+    <div class="flow-row">
+      <span class="flow-arrow" style="margin-left:200px">↓</span>
+    </div>
+    <div class="flow-row">
+      <div class="flow-node">Grammar & Spell Checker Hook</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-node">Length Guardrail Hook</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-node highlighted">Final Output</div>
+    </div>
+    <p class="flow-label">Free LLM Layer: Claude Haiku (via Anthropic API free tier) or Groq Llama 3 as fallback</p>
+  </div>
+
+  <h3>Tech Stack Decision</h3>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Layer</th>
+        <th>Technology</th>
+        <th>Reason</th>
+        <th>Cost</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Frontend</td>
+        <td>Next.js 14 (App Router)</td>
+        <td>SSR + Edge-ready, easy extension packaging</td>
+        <td>Free (Vercel Hobby)</td>
+      </tr>
+      <tr>
+        <td>Styling</td>
+        <td>Tailwind CSS</td>
+        <td>Fast iteration, extension-compatible</td>
+        <td>Free</td>
+      </tr>
+      <tr>
+        <td>LLM</td>
+        <td>Claude Haiku / Groq Llama 3</td>
+        <td>Low cost, fast, sufficient for rewrites</td>
+        <td>Near-zero at free tier volumes</td>
+      </tr>
+      <tr>
+        <td>Rate Limiting</td>
+        <td>Upstash Redis (Edge)</td>
+        <td>IP-based, serverless, 10k req/day free</td>
+        <td>Free tier</td>
+      </tr>
+      <tr>
+        <td>Analytics</td>
+        <td>PostHog (self-hosted or free tier)</td>
+        <td>Privacy-first, no login required</td>
+        <td>Free</td>
+      </tr>
+      <tr>
+        <td>Browser Ext</td>
+        <td>Plasmo framework</td>
+        <td>Cross-browser (Chrome + Firefox), React-based</td>
+        <td>Free</td>
+      </tr>
+      <tr>
+        <td>CI/CD</td>
+        <td>GitHub Actions</td>
+        <td>Extension build + deploy automation</td>
+        <td>Free (public repo)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<hr class="divider">
+
+<!-- SECTION 6 -->
+<div class="section" id="s6">
+  <div class="section-header">
+    <div class="section-num">06</div>
+    <h2>Hooks, Agents &amp; Skills</h2>
+  </div>
+
+  <p>This section defines every Claude Code construct that will be built for ToneWise. Claude Code will generate, test, and wire these automatically based on this specification.</p>
+
+  <h3>Agents</h3>
+  <div class="artifact-grid">
+    <div class="artifact-card">
+      <div class="artifact-type agent">Main Agent</div>
+      <div class="artifact-name">ToneOrchestrator</div>
+      <p class="artifact-desc">Receives the raw message + preset. Routes to classifier, then rewrite agent. Enforces quality gates before returning output.</p>
+    </div>
+    <div class="artifact-card">
+      <div class="artifact-type agent">Sub-Agent</div>
+      <div class="artifact-name">IntentClassifier</div>
+      <p class="artifact-desc">Reads the user's original message and identifies: is the user venting, asking, escalating, or explaining? Determines clarification need.</p>
+    </div>
+    <div class="artifact-card">
+      <div class="artifact-type agent">Sub-Agent</div>
+      <div class="artifact-name">ClarificationAgent</div>
+      <p class="artifact-desc">Activated only in Mode B. Generates 1–2 targeted questions to resolve ambiguity. Strict output format — never more than 2 questions.</p>
+    </div>
+    <div class="artifact-card">
+      <div class="artifact-type agent">Sub-Agent</div>
+      <div class="artifact-name">RewriteAgent</div>
+      <p class="artifact-desc">Produces the final rewritten message. Takes: original text, tone preset, platform context, intent classification, and any clarification answers.</p>
+    </div>
+    <div class="artifact-card">
+      <div class="artifact-type agent">Sub-Agent</div>
+      <div class="artifact-name">GrammarAgent</div>
+      <p class="artifact-desc">Post-processing pass. Fixes spelling, grammar, punctuation. Does not change tone or meaning. Runs on every output regardless of mode.</p>
+    </div>
+  </div>
+
+  <h3>Hooks</h3>
+  <div class="artifact-grid">
+    <div class="artifact-card">
+      <div class="artifact-type hook">Pre-Processing Hook</div>
+      <div class="artifact-name">InputSanitizer</div>
+      <p class="artifact-desc">Strips PII patterns (email addresses, phone numbers, names) before sending to LLM. Adds them back to output post-rewrite using placeholder tokens.</p>
+    </div>
+    <div class="artifact-card">
+      <div class="artifact-type hook">Pre-Processing Hook</div>
+      <div class="artifact-name">LanguageDetector</div>
+      <p class="artifact-desc">Detects input language. If non-English, translates to English first, processes, then optionally returns in original language.</p>
+    </div>
+    <div class="artifact-card">
+      <div class="artifact-type hook">Post-Processing Hook</div>
+      <div class="artifact-name">LengthGuardrail</div>
+      <p class="artifact-desc">Ensures output is never longer than 1.5× the input (for chat modes). Triggers a compression pass if exceeded. Chat messages must stay concise.</p>
+    </div>
+    <div class="artifact-card">
+      <div class="artifact-type hook">Post-Processing Hook</div>
+      <div class="artifact-name">ToneVerifier</div>
+      <p class="artifact-desc">Scores output on requested tone dimensions (politeness, assertiveness) using a lightweight classifier. Flags if output drifts from preset.</p>
+    </div>
+    <div class="artifact-card">
+      <div class="artifact-type hook">Infrastructure Hook</div>
+      <div class="artifact-name">IPRateLimiter</div>
+      <p class="artifact-desc">Checks Redis for IP request count in rolling 24h window. Returns 429 with time-until-reset if limit reached. Logs request fingerprint (IP + UA hash).</p>
+    </div>
+    <div class="artifact-card">
+      <div class="artifact-type hook">Infrastructure Hook</div>
+      <div class="artifact-name">UsageLogger</div>
+      <p class="artifact-desc">Non-blocking async logger. Records: hashed IP, timestamp, preset used, input length, output length. Never stores message content.</p>
+    </div>
+  </div>
+
+  <h3>Skills</h3>
+  <div class="artifact-grid">
+    <div class="artifact-card">
+      <div class="artifact-type skill">Skill</div>
+      <div class="artifact-name">ToneMapping</div>
+      <p class="artifact-desc">Maps each preset to a structured system prompt with specific do/don't rules, example rewrite pairs, and assertiveness calibration instructions.</p>
+    </div>
+    <div class="artifact-card">
+      <div class="artifact-type skill">Skill</div>
+      <div class="artifact-name">PlatformAwareness</div>
+      <p class="artifact-desc">Injects platform-specific formatting rules: Slack (no salutation, ≤3 sentences), email (full structure), Jira (no emotion, action verbs).</p>
+    </div>
+    <div class="artifact-card">
+      <div class="artifact-type skill">Skill</div>
+      <div class="artifact-name">CulturalCalibration</div>
+      <p class="artifact-desc">Library of US/UK/APAC corporate communication norms. Used to ensure output sounds native to the target business culture, not just translated.</p>
+    </div>
+    <div class="artifact-card">
+      <div class="artifact-type skill">Skill</div>
+      <div class="artifact-name">FewShotExamples</div>
+      <p class="artifact-desc">Dynamic retrieval of 2–3 in-context examples matching the user's platform + tone combination. Improves rewrite quality with minimal tokens.</p>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- SECTION 7 -->
+<div class="section" id="s7">
+  <div class="section-header">
+    <div class="section-num">07</div>
+    <h2>Rate Limiting &amp; IP Strategy</h2>
+  </div>
+
+  <div class="callout">
+    <div class="callout-label">Design Principle</div>
+    <p>Users get 10 rewrites per 24-hour rolling window with no account creation. The system must be abuse-resistant without being hostile to legitimate users. No dark patterns.</p>
+  </div>
+
+  <h3>Implementation Plan</h3>
+
+  <div class="code-block">
+<span class="comment">// Edge function: /api/rewrite (Next.js App Router)</span>
+<span class="keyword">import</span> { Ratelimit } <span class="keyword">from</span> <span class="string">"@upstash/ratelimit"</span>;
+<span class="keyword">import</span> { Redis } <span class="keyword">from</span> <span class="string">"@upstash/redis"</span>;
+
+<span class="keyword">const</span> ratelimit = <span class="keyword">new</span> <span class="fn">Ratelimit</span>({
+  redis: Redis.<span class="fn">fromEnv</span>(),
+  limiter: Ratelimit.<span class="fn">slidingWindow</span>(10, <span class="string">"24 h"</span>),
+  analytics: <span class="keyword">true</span>,
+  prefix: <span class="string">"tonewise"</span>
+});
+
+<span class="keyword">export async function</span> <span class="fn">POST</span>(req) {
+  <span class="keyword">const</span> ip = req.headers.<span class="fn">get</span>(<span class="string">"x-forwarded-for"</span>) ?? <span class="string">"anonymous"</span>;
+  <span class="keyword">const</span> { success, reset, remaining } = <span class="keyword">await</span> ratelimit.<span class="fn">limit</span>(ip);
+
+  <span class="keyword">if</span> (!success) {
+    <span class="keyword">return</span> Response.<span class="fn">json</span>({
+      error: <span class="string">"Daily limit reached"</span>,
+      resetsAt: <span class="keyword">new</span> <span class="fn">Date</span>(reset).<span class="fn">toISOString</span>(),
+      upgradeUrl: <span class="string">"/upgrade"</span>
+    }, { status: 429 });
+  }
+
+  <span class="comment">// proceed to agent pipeline...</span>
+}
+  </div>
+
+  <h3>Fingerprinting Strategy</h3>
+  <p>IP alone is insufficient (shared NAT, VPNs). The system combines IP + browser fingerprint hash (User-Agent, Accept-Language headers, screen resolution via JS) to create a composite identifier. This is stored as a one-way hash — not reversible to any personal data.</p>
+
+  <table>
+    <thead>
+      <tr><th>Signal</th><th>Weight</th><th>Why</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>IPv4/IPv6</td><td>Primary</td><td>Most reliable, no JS needed</td></tr>
+      <tr><td>User-Agent hash</td><td>Secondary</td><td>Differentiates devices on same IP</td></tr>
+      <tr><td>Accept-Language</td><td>Supplementary</td><td>Locale signal, low collision risk</td></tr>
+      <tr><td>Canvas fingerprint</td><td>V2 only</td><td>High accuracy, requires user notice</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout green">
+    <div class="callout-label">Privacy Note</div>
+    <p>No fingerprint data is linked to identity. All identifiers expire with the 24-hour window. GDPR/PDPA compliance is maintained by storing only hashed composites, never raw IPs in long-term storage.</p>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- SECTION 8 -->
+<div class="section" id="s8">
+  <div class="section-header">
+    <div class="section-num">08</div>
+    <h2>Team Roles &amp; Claude's Persona Per Role</h2>
+  </div>
+
+  <p>This project is built with Claude Code acting as every specialist simultaneously. Below is each role, their responsibilities in this project, and how to invoke Claude Code in that persona.</p>
+
+  <div class="role-grid">
+
+    <div class="role-card design">
+      <div class="role-icon">🎨</div>
+      <div class="role-title">UX/UI Engineer</div>
+      <div class="role-claude">Claude Code Persona → Design Mode</div>
+      <ul class="role-duties">
+        <li>Design the web app UI and extension popup in Figma spec then code</li>
+        <li>Create tone preset selector, input textarea, output card components</li>
+        <li>Handle empty states, error states, and limit-reached UI</li>
+        <li>Ensure accessibility (WCAG AA) and mobile responsiveness</li>
+        <li>Design the "upgrade" conversion flow without dark patterns</li>
+      </ul>
+    </div>
+
+    <div class="role-card eng-lead">
+      <div class="role-icon">🏗️</div>
+      <div class="role-title">Engineering Lead</div>
+      <div class="role-claude">Claude Code Persona → Architecture Mode</div>
+      <ul class="role-duties">
+        <li>Own the overall system design and technical decisions</li>
+        <li>Define API contracts between frontend, edge functions, and LLM agents</li>
+        <li>Set up monorepo structure (web app + extension in one repo)</li>
+        <li>Establish branching strategy, review standards, deployment pipelines</li>
+        <li>Make build-vs-buy decisions (rate limiting, analytics, hosting)</li>
+      </ul>
+    </div>
+
+    <div class="role-card frontend">
+      <div class="role-icon">⚛️</div>
+      <div class="role-title">Principal Frontend Architect</div>
+      <div class="role-claude">Claude Code Persona → Frontend Mode</div>
+      <ul class="role-duties">
+        <li>Build Next.js app with App Router and streaming UI</li>
+        <li>Implement Plasmo browser extension with content script injection</li>
+        <li>Create the "detect text field and offer ToneWise" trigger in extension</li>
+        <li>Handle state management (Zustand or React Context) for usage counter</li>
+        <li>Optimise for Core Web Vitals, extension startup time &lt;300ms</li>
+      </ul>
+    </div>
+
+    <div class="role-card backend">
+      <div class="role-icon">🔧</div>
+      <div class="role-title">Principal Backend Architect</div>
+      <div class="role-claude">Claude Code Persona → Backend Mode</div>
+      <ul class="role-duties">
+        <li>Design and implement all Edge API routes in Next.js</li>
+        <li>Build the multi-agent pipeline (Orchestrator → sub-agents)</li>
+        <li>Integrate Upstash Redis for rate limiting with sliding window</li>
+        <li>Implement prompt versioning and A/B testing infrastructure</li>
+        <li>Set up logging, error tracking (Sentry), and usage analytics</li>
+      </ul>
+    </div>
+
+    <div class="role-card pm">
+      <div class="role-icon">📊</div>
+      <div class="role-title">Product Manager</div>
+      <div class="role-claude">Claude Code Persona → PM Mode</div>
+      <ul class="role-duties">
+        <li>Define and prioritise the V1 feature set vs. V2 backlog</li>
+        <li>Write PRDs for each feature with acceptance criteria</li>
+        <li>Define success metrics and measurement plan</li>
+        <li>Research competitor landscape (Grammarly, Copilot, Notion AI)</li>
+        <li>Design the free-to-paid upgrade journey and conversion funnel</li>
+      </ul>
+    </div>
+
+    <div class="role-card qa">
+      <div class="role-icon">🧪</div>
+      <div class="role-title">QA Engineer (Manual + Automation)</div>
+      <div class="role-claude">Claude Code Persona → QA Mode</div>
+      <ul class="role-duties">
+        <li>Write test cases for all tone presets across platform contexts</li>
+        <li>Build Playwright E2E tests for the web app UI flows</li>
+        <li>Test rate limiting edge cases (VPN, shared IP, clock skew)</li>
+        <li>Perform adversarial testing: prompt injection, jailbreak attempts</li>
+        <li>Regression suite for LLM prompt changes (output quality checks)</li>
+      </ul>
+    </div>
+
+    <div class="role-card research">
+      <div class="role-icon">🔬</div>
+      <div class="role-title">Domain Researcher</div>
+      <div class="role-claude">Claude Code Persona → Research Mode</div>
+      <ul class="role-duties">
+        <li>Research cross-cultural workplace communication norms (US, UK, IN, PH)</li>
+        <li>Curate 50+ example rewrites per tone preset for few-shot training</li>
+        <li>Benchmark free LLM options (Groq, Together AI, Anthropic free tier)</li>
+        <li>Study competitor feature gaps and user reviews on Product Hunt / G2</li>
+        <li>Define the "cultural calibration" library that feeds into prompts</li>
+      </ul>
+    </div>
+
+    <div class="role-card compliance">
+      <div class="role-icon">⚖️</div>
+      <div class="role-title">Compliance Officer</div>
+      <div class="role-claude">Claude Code Persona → Legal Mode</div>
+      <ul class="role-duties">
+        <li>Draft Privacy Policy covering IP logging and fingerprinting</li>
+        <li>Ensure GDPR, PDPA (India DPDP Act 2023), and CCPA compliance</li>
+        <li>Define data retention policy: 24h rolling window, then purge</li>
+        <li>Review Anthropic API Terms of Service for product restrictions</li>
+        <li>Write Terms of Service for end users of ToneWise</li>
+      </ul>
+    </div>
+
+    <div class="role-card writer">
+      <div class="role-icon">✍️</div>
+      <div class="role-title">Technical Writer</div>
+      <div class="role-claude">Claude Code Persona → Docs Mode</div>
+      <ul class="role-duties">
+        <li>Write README, API documentation, and developer setup guide</li>
+        <li>Create user-facing help text for each tone preset</li>
+        <li>Document the agent architecture for future contributors</li>
+        <li>Write extension store listing copy (Chrome Web Store, Firefox Add-ons)</li>
+        <li>Maintain a changelog and release notes format</li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- SECTION 9 -->
+<div class="section" id="s9">
+  <div class="section-header">
+    <div class="section-num">09</div>
+    <h2>Development Phases</h2>
+  </div>
+
+  <div class="phases">
+    <div class="phase">
+      <div class="phase-dot">P0</div>
+      <div class="phase-body">
+        <div class="phase-title">Research & Architecture (Week 1–2)</div>
+        <p class="phase-desc">Claude Code in Research Mode + Architecture Mode. Produce this document, benchmark LLMs, decide on tech stack, set up repo structure, establish Claude Code project config.</p>
+        <div class="phase-tags">
+          <span class="phase-tag">Domain Researcher</span>
+          <span class="phase-tag">Engineering Lead</span>
+          <span class="phase-tag">PM</span>
+        </div>
+      </div>
+    </div>
+    <div class="phase">
+      <div class="phase-dot">P1</div>
+      <div class="phase-body">
+        <div class="phase-title">Core Agent Pipeline (Week 3–4)</div>
+        <p class="phase-desc">Build ToneOrchestrator, IntentClassifier, RewriteAgent, GrammarAgent. Integrate Claude Haiku API. Wire rate limiting hook. No UI yet — test via Postman/curl.</p>
+        <div class="phase-tags">
+          <span class="phase-tag">Backend Architect</span>
+          <span class="phase-tag">QA</span>
+        </div>
+      </div>
+    </div>
+    <div class="phase">
+      <div class="phase-dot">P2</div>
+      <div class="phase-body">
+        <div class="phase-title">Web App UI (Week 5–6)</div>
+        <p class="phase-desc">Build Next.js frontend. Implement tone preset selector, input/output panels, usage counter, 429 state handling. Mobile-responsive. Accessibility audit.</p>
+        <div class="phase-tags">
+          <span class="phase-tag">Frontend Architect</span>
+          <span class="phase-tag">UX/UI Engineer</span>
+          <span class="phase-tag">QA</span>
+        </div>
+      </div>
+    </div>
+    <div class="phase">
+      <div class="phase-dot">P3</div>
+      <div class="phase-body">
+        <div class="phase-title">Browser Extension (Week 7–8)</div>
+        <p class="phase-desc">Build Plasmo extension. Content script detects active text fields (Slack, Gmail, Jira). Injects floating ToneWise button. Popup UI. Chrome + Firefox build.</p>
+        <div class="phase-tags">
+          <span class="phase-tag">Frontend Architect</span>
+          <span class="phase-tag">QA</span>
+          <span class="phase-tag">Compliance</span>
+        </div>
+      </div>
+    </div>
+    <div class="phase">
+      <div class="phase-dot">P4</div>
+      <div class="phase-body">
+        <div class="phase-title">Compliance, Docs & Launch (Week 9–10)</div>
+        <p class="phase-desc">Privacy policy, ToS, extension store submission, README, landing page, Product Hunt draft. Internal QA sign-off. Soft launch to beta users.</p>
+        <div class="phase-tags">
+          <span class="phase-tag">Technical Writer</span>
+          <span class="phase-tag">Compliance</span>
+          <span class="phase-tag">PM</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- SECTION 10 -->
+<div class="section" id="s10">
+  <div class="section-header">
+    <div class="section-num">10</div>
+    <h2>Claude Code Instructions Per Role</h2>
+  </div>
+
+  <p>Use these exact prompts to activate Claude Code in each specialised role. Each prompt tells Claude Code what to research, what to build, and what to produce as output.</p>
+
+  <h3>Engineering Lead — System Setup</h3>
+  <div class="code-block">
+You are the Engineering Lead for ToneWise, an AI workplace communication assistant.
+Your first task is to:
+1. Create a monorepo with two workspaces: /apps/web (Next.js 14) and /apps/extension (Plasmo)
+2. Set up shared /packages/agents for the LLM agent pipeline
+3. Configure ESLint, Prettier, Husky pre-commit hooks, and TypeScript strict mode
+4. Create a /docs folder and start the ARCHITECTURE.md file
+5. Set up GitHub Actions workflow for: lint → test → build → deploy (Vercel for web)
+Output the full directory tree and key config files.
+  </div>
+
+  <h3>Backend Architect — Agent Pipeline</h3>
+  <div class="code-block">
+You are the Principal Backend Architect for ToneWise.
+Build the multi-agent pipeline in /packages/agents:
+- ToneOrchestrator: accepts { message, preset, platform } → returns { rewritten, grammarFixed }
+- IntentClassifier: classifies message intent as one of: asking | escalating | explaining | venting | neutral
+- RewriteAgent: rewrites message using tone preset system prompt + platform context
+- GrammarAgent: post-process pass fixing spelling and grammar without changing meaning
+- All agents use the Anthropic Claude Haiku API
+- Add InputSanitizer hook (strip PII patterns before LLM call)
+- Add LengthGuardrail hook (output max 1.5x input length for chat presets)
+Write full TypeScript implementation with error handling and types.
+  </div>
+
+  <h3>Frontend Architect — Web App</h3>
+  <div class="code-block">
+You are the Principal Frontend Architect for ToneWise.
+Build the Next.js 14 App Router frontend:
+- Page: / → main rewrite interface
+- Components: TonePresetSelector, MessageInput, OutputCard, UsageCounter, LimitReachedBanner
+- UsageCounter reads remaining uses from API response headers (X-RateLimit-Remaining)
+- LimitReachedBanner shows time until reset and optional upgrade CTA
+- Streaming: use ReadableStream to show rewrite output token by token
+- Mobile-first, works at 360px width
+- Use Tailwind CSS, no other UI library
+Output all component files with full implementation.
+  </div>
+
+  <h3>QA Engineer — Test Suite</h3>
+  <div class="code-block">
+You are the QA Engineer for ToneWise.
+Create a comprehensive test suite:
+1. Unit tests (Vitest) for each agent: IntentClassifier, RewriteAgent, GrammarAgent
+2. Integration tests for the full pipeline with mocked Anthropic API responses
+3. Playwright E2E tests covering:
+   - Happy path: paste message → select preset → get rewrite → copy
+   - Rate limit hit: 11th request shows limit banner
+   - Mode B: clarification flow with 2 questions
+4. Adversarial tests: prompt injection attempts in user input field
+5. Output quality regression: 20 fixture pairs (input → expected output characteristics)
+Write all test files. Mock the Anthropic API using MSW (Mock Service Worker).
+  </div>
+
+  <h3>Domain Researcher — Tone Library</h3>
+  <div class="code-block">
+You are the Domain Researcher for ToneWise.
+Research and produce:
+1. A cultural communication norms document covering US, UK, Indian, and Philippine corporate English
+   — key differences in directness, formality, escalation language, and gratitude expressions
+2. 10 example rewrite pairs per tone preset (50 total) covering:
+   — Slack, email, Jira for each: Humble & Polite, Confident & Direct, Clarifying, Empathetic Nudge
+3. A scoring rubric for evaluating rewrite quality on: intent preservation, tone accuracy, length appropriateness
+Output as structured JSON that can be used as few-shot examples in system prompts.
+  </div>
+
+  <h3>Compliance Officer — Legal Docs</h3>
+  <div class="code-block">
+You are the Compliance Officer for ToneWise.
+Draft:
+1. Privacy Policy — covering: what data is collected (hashed IP, usage counts), 
+   how long it is retained (24h rolling window), no content storage, user rights
+2. Terms of Service — acceptable use, rate limits, no warranty on rewrites, 
+   reservation of right to block abusive IPs
+3. Cookie/storage notice — only functional storage (usage counter), no tracking cookies
+Ensure compliance with: GDPR (EU), India DPDP Act 2023, CCPA (California).
+Output as Markdown files ready for /apps/web/app/legal/ pages.
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- SECTION 11 -->
+<div class="section" id="s11">
+  <div class="section-header">
+    <div class="section-num">11</div>
+    <h2>Compliance &amp; Ethics</h2>
+  </div>
+
+  <h3>Data Handling Commitments</h3>
+  <table>
+    <thead>
+      <tr><th>Data Type</th><th>Stored?</th><th>Duration</th><th>Purpose</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Message content (input)</td><td><span class="badge red">Never</span></td><td>—</td><td>Passed to LLM, never persisted</td></tr>
+      <tr><td>Rewritten output</td><td><span class="badge red">Never</span></td><td>—</td><td>Returned to user, never persisted</td></tr>
+      <tr><td>Hashed IP + UA fingerprint</td><td><span class="badge amber">Yes</span></td><td>24 hours</td><td>Rate limit enforcement only</td></tr>
+      <tr><td>Usage count per fingerprint</td><td><span class="badge amber">Yes</span></td><td>24 hours</td><td>Free tier enforcement</td></tr>
+      <tr><td>Aggregate analytics (preset usage %)</td><td><span class="badge green">Yes</span></td><td>90 days</td><td>Product improvement, no PII</td></tr>
+    </tbody>
+  </table>
+
+  <h3>LLM Safety Guardrails</h3>
+  <div class="callout">
+    <div class="callout-label">Adversarial Input Handling</div>
+    <p>The InputSanitizer hook strips common prompt injection patterns before the message reaches the LLM. The system prompt explicitly instructs the agent to ignore instructions embedded in user messages and only perform the rewrite task. Claude Haiku's built-in safety filters provide the second line of defence.</p>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- SECTION 12 -->
+<div class="section" id="s12">
+  <div class="section-header">
+    <div class="section-num">12</div>
+    <h2>Success Metrics</h2>
+  </div>
+
+  <table>
+    <thead>
+      <tr><th>Metric</th><th>V1 Target (Month 3)</th><th>V2 Target (Month 6)</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Daily Active Users (DAU)</td><td>500</td><td>5,000</td></tr>
+      <tr><td>Messages rewritten / day</td><td>2,000</td><td>25,000</td></tr>
+      <tr><td>Free-to-paid conversion</td><td>—</td><td>3–5%</td></tr>
+      <tr><td>Avg. latency (p95)</td><td>&lt; 3.5s</td><td>&lt; 2s</td></tr>
+      <tr><td>Output quality satisfaction</td><td>≥ 70% thumbs up</td><td>≥ 85%</td></tr>
+      <tr><td>Abuse rate (limit bypass)</td><td>&lt; 2%</td><td>&lt; 0.5%</td></tr>
+      <tr><td>Extension install retention (D7)</td><td>—</td><td>≥ 40%</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout green">
+    <div class="callout-label">Growth Strategy</div>
+    <p>The 10-message free tier is designed to demonstrate value within a single work session, driving organic sharing within teams. The upgrade pitch is contextual — shown at message 8, not as a barrier — and offers unlimited daily messages plus team context memory at a low monthly price.</p>
+  </div>
+</div>
+
+</div><!-- /main -->
+
+<!-- FOOTER -->
+<div class="footer">
+  <div>ToneWise · Master Product & Engineering Document · v1.0</div>
+  <div>Prepared for <span>Claude Code</span> · All roles, one agentic system</div>
+</div>
+
+</body>
+</html>

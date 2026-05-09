@@ -1,4 +1,4 @@
-# ToneWise
+# How to Talk Corporate
 
 > AI-powered workplace communication assistant — zero login, free tier, production grade.
 
@@ -52,25 +52,25 @@ tonewise/
 ### Web app
 
 ```bash
-pnpm --filter @tonewise/web dev       # http://localhost:3000
-pnpm --filter @tonewise/web test      # vitest unit tests
-pnpm --filter @tonewise/web test:e2e  # Playwright E2E tests (requires npx playwright install)
+pnpm --filter @how-to-talk-corporate/web dev       # http://localhost:3000
+pnpm --filter @how-to-talk-corporate/web test      # vitest unit tests
+pnpm --filter @how-to-talk-corporate/web test:e2e  # Playwright E2E tests (requires npx playwright install)
 ```
 
 ### Browser extension
 
 ```bash
-pnpm --filter @tonewise/extension dev       # watch mode → load build/chrome-mv3-dev in Chrome
-pnpm --filter @tonewise/extension build      # Chrome MV3 production build
-pnpm --filter @tonewise/extension build:firefox  # Firefox MV2
-pnpm --filter @tonewise/extension package    # generate .zip for store submission
+pnpm --filter @how-to-talk-corporate/extension dev       # watch mode → load build/chrome-mv3-dev in Chrome
+pnpm --filter @how-to-talk-corporate/extension build      # Chrome MV3 production build
+pnpm --filter @how-to-talk-corporate/extension build:firefox  # Firefox MV2
+pnpm --filter @how-to-talk-corporate/extension package    # generate .zip for store submission
 ```
 
 ### Agent pipeline (shared)
 
 ```bash
-pnpm --filter @tonewise/agents build   # compile to dist/
-pnpm --filter @tonewise/agents test    # 13 Vitest tests with mocked Anthropic API
+pnpm --filter @how-to-talk-corporate/agents build   # compile to dist/
+pnpm --filter @how-to-talk-corporate/agents test    # 13 Vitest tests with mocked Anthropic API
 ```
 
 ### Root-level commands

@@ -1,11 +1,11 @@
-import type { Intent, RewriteRequest, RewriteResult } from '../types/index.js';
-import { inputSanitizer, restorePlaceholders } from '../hooks/input-sanitizer.js';
-import { lengthGuardrail } from '../hooks/length-guardrail.js';
-import { intentClassifier } from './intent-classifier.js';
-import { rewriteAgent } from './rewrite-agent.js';
-import { grammarAgent } from './grammar-agent.js';
-import { platformAwareness } from '../skills/platform-awareness.js';
-import { scoreTone } from '../score-tone.js';
+import type { Intent, RewriteRequest, RewriteResult } from '../types/index';
+import { inputSanitizer, restorePlaceholders } from '../hooks/input-sanitizer';
+import { lengthGuardrail } from '../hooks/length-guardrail';
+import { intentClassifier } from './intent-classifier';
+import { rewriteAgent } from './rewrite-agent';
+import { grammarAgent } from './grammar-agent';
+import { platformAwareness } from '../skills/platform-awareness';
+import { scoreTone } from '../score-tone';
 
 /**
  * Pipeline order (per docs/ARCHITECTURE.md §4):

@@ -1,5 +1,5 @@
-import type { ToneScore, TonePreset } from './types/index.js';
-import { toneMapping } from './skills/tone-mapping.js';
+import type { ToneScore, TonePreset } from './types/index';
+import { toneMapping } from './skills/tone-mapping';
 
 /**
  * Heuristic tone scoring. Stand-in for the full LLM-based ToneVerifier

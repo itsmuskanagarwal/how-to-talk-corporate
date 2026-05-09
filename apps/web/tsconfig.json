@@ -6,8 +6,8 @@
     "plugins": [{ "name": "next" }],
     "paths": {
       "@/*": ["./*"],
-      "@tonewise/agents": ["../../packages/agents/src"],
-      "@tonewise/agents/*": ["../../packages/agents/src/*"]
+      "@how-to-talk-corporate/agents": ["../../packages/agents/src"],
+      "@how-to-talk-corporate/agents/*": ["../../packages/agents/src/*"]
     },
     "noEmit": true,
     "allowJs": true

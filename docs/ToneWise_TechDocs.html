@@ -1,0 +1,1292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ToneWise — Technical Architecture Documentation</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Syne:wght@400;600;700;800&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --bg-2: #0f0f1a;
+    --bg-3: #141428;
+    --bg-card: #12121e;
+    --line: rgba(255,255,255,0.06);
+    --line-2: rgba(255,255,255,0.12);
+    --text: #e2e0f0;
+    --text-2: #8b8aab;
+    --text-3: #4a4970;
+    --green: #00e5a0;
+    --green-dim: rgba(0,229,160,0.12);
+    --green-glow: rgba(0,229,160,0.06);
+    --blue: #4d9fff;
+    --blue-dim: rgba(77,159,255,0.12);
+    --purple: #b47fff;
+    --purple-dim: rgba(180,127,255,0.12);
+    --orange: #ff8c42;
+    --orange-dim: rgba(255,140,66,0.12);
+    --red: #ff5c7c;
+    --mono: 'JetBrains Mono', monospace;
+    --display: 'Syne', sans-serif;
+    --body: 'Lora', serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--body);
+    font-size: 15px;
+    line-height: 1.8;
+    overflow-x: hidden;
+  }
+
+  /* ─── NOISE OVERLAY ─── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ─── HEADER ─── */
+  .header {
+    position: relative;
+    padding: 80px 60px 60px;
+    border-bottom: 1px solid var(--line);
+    overflow: hidden;
+  }
+
+  .header::after {
+    content: '';
+    position: absolute;
+    top: -120px; right: -120px;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(0,229,160,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .header-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+
+  .dot-live {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 8px var(--green);
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; box-shadow: 0 0 8px var(--green); }
+    50% { opacity: 0.5; box-shadow: 0 0 4px var(--green); }
+  }
+
+  .eyebrow-text {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--green);
+  }
+
+  .header h1 {
+    font-family: var(--display);
+    font-size: clamp(40px, 6vw, 72px);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -2px;
+    margin-bottom: 16px;
+  }
+
+  .header h1 .accent { color: var(--green); }
+
+  .header-sub {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--text-2);
+    max-width: 600px;
+    line-height: 1.6;
+    margin-bottom: 32px;
+  }
+
+  .header-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .pill {
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    border: 1px solid;
+    letter-spacing: 0.06em;
+  }
+
+  .pill.green { border-color: rgba(0,229,160,0.3); color: var(--green); background: var(--green-dim); }
+  .pill.blue { border-color: rgba(77,159,255,0.3); color: var(--blue); background: var(--blue-dim); }
+  .pill.purple { border-color: rgba(180,127,255,0.3); color: var(--purple); background: var(--purple-dim); }
+  .pill.orange { border-color: rgba(255,140,66,0.3); color: var(--orange); background: var(--orange-dim); }
+
+  /* ─── NAV SIDEBAR ─── */
+  .layout {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    min-height: 100vh;
+    position: relative;
+  }
+
+  .sidebar {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    border-right: 1px solid var(--line);
+    padding: 32px 24px;
+    background: var(--bg);
+  }
+
+  .sidebar::-webkit-scrollbar { width: 4px; }
+  .sidebar::-webkit-scrollbar-track { background: transparent; }
+  .sidebar::-webkit-scrollbar-thumb { background: var(--line-2); border-radius: 2px; }
+
+  .sidebar-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-3);
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 10px;
+    border-radius: 6px;
+    text-decoration: none;
+    color: var(--text-2);
+    font-family: var(--mono);
+    font-size: 12px;
+    transition: all 0.15s;
+    margin-bottom: 2px;
+  }
+
+  .nav-item:hover {
+    background: var(--bg-3);
+    color: var(--green);
+  }
+
+  .nav-item .nav-num {
+    font-size: 9px;
+    color: var(--text-3);
+    min-width: 16px;
+  }
+
+  .nav-section {
+    margin-top: 20px;
+    margin-bottom: 8px;
+  }
+
+  /* ─── MAIN CONTENT ─── */
+  .content {
+    padding: 48px 56px 80px;
+    max-width: 860px;
+  }
+
+  /* ─── SECTION ─── */
+  .section {
+    margin-bottom: 72px;
+    scroll-margin-top: 32px;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+
+  .section-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-3);
+    letter-spacing: 0.1em;
+  }
+
+  .section h2 {
+    font-family: var(--display);
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    color: var(--text);
+  }
+
+  .section h3 {
+    font-family: var(--display);
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--text);
+    margin: 28px 0 12px;
+  }
+
+  p { color: var(--text-2); margin-bottom: 14px; }
+
+  /* ─── FOLDER TREE ─── */
+  .tree {
+    background: var(--bg-card);
+    border: 1px solid var(--line-2);
+    border-radius: 12px;
+    overflow: hidden;
+    margin: 20px 0;
+  }
+
+  .tree-header {
+    background: var(--bg-3);
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .tree-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+  }
+
+  .tree-body {
+    padding: 20px 24px;
+    font-family: var(--mono);
+    font-size: 12.5px;
+    line-height: 2;
+  }
+
+  .tree-line { display: flex; align-items: center; gap: 0; }
+
+  .tree-indent { color: var(--text-3); white-space: pre; }
+
+  .tree-icon { margin-right: 6px; }
+
+  .t-folder { color: var(--blue); }
+  .t-file { color: var(--text-2); }
+  .t-important { color: var(--green); }
+  .t-config { color: var(--orange); }
+  .t-test { color: var(--purple); }
+  .t-comment { color: var(--text-3); font-style: italic; margin-left: 12px; }
+
+  /* ─── CODE BLOCK ─── */
+  .code {
+    background: var(--bg-card);
+    border: 1px solid var(--line-2);
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 16px 0;
+  }
+
+  .code-header {
+    background: var(--bg-3);
+    padding: 8px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .code-filename {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-2);
+  }
+
+  .code-lang {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-3);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .code-body {
+    padding: 16px 20px;
+    font-family: var(--mono);
+    font-size: 12.5px;
+    line-height: 1.8;
+    overflow-x: auto;
+    color: var(--text-2);
+  }
+
+  .kw { color: var(--purple); }
+  .fn { color: var(--blue); }
+  .str { color: var(--green); }
+  .cm { color: var(--text-3); font-style: italic; }
+  .ty { color: var(--orange); }
+  .nu { color: #ff8c42; }
+
+  /* ─── FLOW DIAGRAM ─── */
+  .flow-wrap {
+    background: var(--bg-card);
+    border: 1px solid var(--line-2);
+    border-radius: 12px;
+    padding: 28px;
+    margin: 20px 0;
+    overflow-x: auto;
+  }
+
+  .flow-title {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-3);
+    margin-bottom: 20px;
+  }
+
+  .flow-row {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin-bottom: 12px;
+    flex-wrap: nowrap;
+    min-width: max-content;
+  }
+
+  .fnode {
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-family: var(--mono);
+    font-size: 11.5px;
+    white-space: nowrap;
+    border: 1px solid;
+  }
+
+  .fnode.user { border-color: rgba(77,159,255,0.4); color: var(--blue); background: var(--blue-dim); }
+  .fnode.api { border-color: rgba(0,229,160,0.4); color: var(--green); background: var(--green-dim); }
+  .fnode.agent { border-color: rgba(180,127,255,0.4); color: var(--purple); background: var(--purple-dim); }
+  .fnode.hook { border-color: rgba(255,140,66,0.4); color: var(--orange); background: var(--orange-dim); }
+  .fnode.store { border-color: rgba(255,92,124,0.4); color: var(--red); background: rgba(255,92,124,0.1); }
+
+  .farrow {
+    font-family: var(--mono);
+    color: var(--text-3);
+    padding: 0 8px;
+    font-size: 14px;
+  }
+
+  .farrow-down {
+    display: block;
+    text-align: center;
+    color: var(--text-3);
+    font-family: var(--mono);
+    font-size: 14px;
+    line-height: 1;
+    margin: 4px 0 4px 16px;
+  }
+
+  .flow-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-3);
+    margin-top: 12px;
+    font-style: italic;
+  }
+
+  /* ─── INFO CARDS ─── */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+    margin: 20px 0;
+  }
+
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--line-2);
+    border-radius: 10px;
+    padding: 18px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+  }
+
+  .card.green::before { background: var(--green); }
+  .card.blue::before { background: var(--blue); }
+  .card.purple::before { background: var(--purple); }
+  .card.orange::before { background: var(--orange); }
+  .card.red::before { background: var(--red); }
+
+  .card-type {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .card.green .card-type { color: var(--green); }
+  .card.blue .card-type { color: var(--blue); }
+  .card.purple .card-type { color: var(--purple); }
+  .card.orange .card-type { color: var(--orange); }
+  .card.red .card-type { color: var(--red); }
+
+  .card-name {
+    font-family: var(--mono);
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+
+  .card-desc {
+    font-family: var(--body);
+    font-size: 12px;
+    color: var(--text-2);
+    line-height: 1.6;
+  }
+
+  .card-input {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-3);
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid var(--line);
+    line-height: 1.6;
+  }
+
+  /* ─── TABLE ─── */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-family: var(--mono);
+    font-size: 12px;
+  }
+
+  th {
+    text-align: left;
+    padding: 10px 14px;
+    background: var(--bg-3);
+    color: var(--text-3);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--line-2);
+  }
+
+  td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--line);
+    color: var(--text-2);
+    vertical-align: top;
+  }
+
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: var(--bg-2); }
+
+  /* ─── CALLOUT ─── */
+  .callout {
+    border-left: 2px solid var(--green);
+    background: var(--green-glow);
+    padding: 14px 18px;
+    border-radius: 0 8px 8px 0;
+    margin: 20px 0;
+  }
+
+  .callout.blue { border-left-color: var(--blue); background: var(--blue-dim); }
+  .callout.orange { border-left-color: var(--orange); background: var(--orange-dim); }
+
+  .callout-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--green);
+    margin-bottom: 6px;
+  }
+
+  .callout.blue .callout-label { color: var(--blue); }
+  .callout.orange .callout-label { color: var(--orange); }
+
+  .callout p { font-size: 13px; margin: 0; }
+
+  /* ─── ENV TABLE ─── */
+  .env-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 2fr;
+    gap: 16px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--line);
+    font-family: var(--mono);
+    font-size: 11.5px;
+  }
+
+  .env-key { color: var(--orange); }
+  .env-val { color: var(--green); }
+  .env-desc { color: var(--text-3); }
+
+  /* ─── DIVIDER ─── */
+  .divider {
+    border: none;
+    border-top: 1px solid var(--line);
+    margin: 56px 0;
+  }
+
+  /* ─── TEST STATUS ─── */
+  .test-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--line);
+    font-family: var(--mono);
+    font-size: 12px;
+  }
+
+  .test-status {
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 2px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 9px;
+    font-weight: 700;
+  }
+
+  .test-status.pass { background: var(--green); color: var(--bg); }
+  .test-status.fail { background: var(--red); color: white; }
+  .test-status.pending { background: var(--text-3); color: var(--bg); }
+
+  .test-name { color: var(--text); flex: 1; }
+  .test-file { color: var(--text-3); font-size: 10px; }
+
+  /* ─── FOOTER ─── */
+  .footer {
+    border-top: 1px solid var(--line);
+    padding: 24px 56px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-3);
+  }
+
+  .footer span { color: var(--green); }
+
+  @media (max-width: 768px) {
+    .layout { grid-template-columns: 1fr; }
+    .sidebar { display: none; }
+    .content { padding: 32px 24px; }
+    .header { padding: 48px 24px 40px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-eyebrow">
+    <div class="dot-live"></div>
+    <span class="eyebrow-text">Technical Architecture · v1.0 · Internal Dev Docs</span>
+  </div>
+  <h1>ToneWise <span class="accent">/_docs</span></h1>
+  <p class="header-sub">
+    Logical architecture, folder structure, agent pipeline, data flow, environment setup,
+    and test coverage map for engineers joining the project.
+  </p>
+  <div class="header-pills">
+    <span class="pill green">Next.js 14 App Router</span>
+    <span class="pill blue">TypeScript Strict</span>
+    <span class="pill purple">Claude Haiku API</span>
+    <span class="pill orange">Upstash Redis</span>
+    <span class="pill green">Plasmo Extension</span>
+    <span class="pill blue">pnpm Monorepo</span>
+  </div>
+</div>
+
+<!-- LAYOUT -->
+<div class="layout">
+
+  <!-- SIDEBAR NAV -->
+  <nav class="sidebar">
+    <div class="sidebar-label">Contents</div>
+
+    <div class="nav-section">
+      <a class="nav-item" href="#s1"><span class="nav-num">01</span> Monorepo Structure</a>
+      <a class="nav-item" href="#s2"><span class="nav-num">02</span> Web App Folders</a>
+      <a class="nav-item" href="#s3"><span class="nav-num">03</span> Agent Pipeline</a>
+      <a class="nav-item" href="#s4"><span class="nav-num">04</span> Hooks Architecture</a>
+      <a class="nav-item" href="#s5"><span class="nav-num">05</span> Data Flow</a>
+      <a class="nav-item" href="#s6"><span class="nav-num">06</span> API Routes</a>
+      <a class="nav-item" href="#s7"><span class="nav-num">07</span> Browser Extension</a>
+      <a class="nav-item" href="#s8"><span class="nav-num">08</span> Environment Variables</a>
+      <a class="nav-item" href="#s9"><span class="nav-num">09</span> Local Dev Setup</a>
+      <a class="nav-item" href="#s10"><span class="nav-num">10</span> Test Coverage Map</a>
+      <a class="nav-item" href="#s11"><span class="nav-num">11</span> Deployment</a>
+    </div>
+  </nav>
+
+  <!-- CONTENT -->
+  <main class="content">
+
+    <!-- S1: MONOREPO -->
+    <section class="section" id="s1">
+      <div class="section-header">
+        <span class="section-num">01</span>
+        <h2>Monorepo Structure</h2>
+      </div>
+
+      <p>ToneWise is a pnpm monorepo with two deployable apps and one shared package. Everything lives in a single repository with shared TypeScript config, ESLint rules, and Prettier settings.</p>
+
+      <div class="tree">
+        <div class="tree-header">
+          <div class="tree-dot" style="background:#ff5c7c"></div>
+          <div class="tree-dot" style="background:#ff8c42"></div>
+          <div class="tree-dot" style="background:#00e5a0"></div>
+          <span style="font-family:var(--mono);font-size:11px;color:var(--text-2);margin-left:8px">tonewise/ — root</span>
+        </div>
+        <div class="tree-body">
+          <div class="tree-line"><span class="t-folder">tonewise/</span></div>
+          <div class="tree-line"><span class="tree-indent">├── </span><span class="t-folder tree-icon">📁</span><span class="t-folder">apps/</span><span class="t-comment">— deployable applications</span></div>
+          <div class="tree-line"><span class="tree-indent">│   ├── </span><span class="t-folder tree-icon">📁</span><span class="t-important">web/</span><span class="t-comment">— Next.js 14 web app → Vercel</span></div>
+          <div class="tree-line"><span class="tree-indent">│   └── </span><span class="t-folder tree-icon">📁</span><span class="t-important">extension/</span><span class="t-comment">— Plasmo browser extension → Chrome/Firefox</span></div>
+          <div class="tree-line"><span class="tree-indent">├── </span><span class="t-folder tree-icon">📁</span><span class="t-folder">packages/</span><span class="t-comment">— shared internal packages</span></div>
+          <div class="tree-line"><span class="tree-indent">│   └── </span><span class="t-folder tree-icon">📁</span><span class="t-important">agents/</span><span class="t-comment">— LLM agent pipeline (shared by web + ext)</span></div>
+          <div class="tree-line"><span class="tree-indent">├── </span><span class="t-folder tree-icon">📁</span><span class="t-folder">docs/</span><span class="t-comment">— this file + master product doc</span></div>
+          <div class="tree-line"><span class="tree-indent">├── </span><span class="t-config tree-icon">⚙️</span><span class="t-config">pnpm-workspace.yaml</span><span class="t-comment">— workspace definition</span></div>
+          <div class="tree-line"><span class="tree-indent">├── </span><span class="t-config tree-icon">⚙️</span><span class="t-config">tsconfig.base.json</span><span class="t-comment">— shared TS config (strict mode)</span></div>
+          <div class="tree-line"><span class="tree-indent">├── </span><span class="t-config tree-icon">⚙️</span><span class="t-config">.eslintrc.json</span><span class="t-comment">— shared lint rules</span></div>
+          <div class="tree-line"><span class="tree-indent">├── </span><span class="t-config tree-icon">⚙️</span><span class="t-config">.prettierrc</span></div>
+          <div class="tree-line"><span class="tree-indent">├── </span><span class="t-config tree-icon">⚙️</span><span class="t-config">.github/workflows/</span><span class="t-comment">— CI/CD pipelines</span></div>
+          <div class="tree-line"><span class="tree-indent">└── </span><span class="t-file">README.md</span></div>
+        </div>
+      </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- S2: WEB APP -->
+    <section class="section" id="s2">
+      <div class="section-header">
+        <span class="section-num">02</span>
+        <h2>Web App Folder Structure</h2>
+      </div>
+
+      <p>The web app uses Next.js 14 App Router conventions. Every route is a folder; every component is co-located with its test.</p>
+
+      <div class="tree">
+        <div class="tree-header">
+          <div class="tree-dot" style="background:#ff5c7c"></div>
+          <div class="tree-dot" style="background:#ff8c42"></div>
+          <div class="tree-dot" style="background:#00e5a0"></div>
+          <span style="font-family:var(--mono);font-size:11px;color:var(--text-2);margin-left:8px">apps/web/</span>
+        </div>
+        <div class="tree-body">
+          <div class="tree-line"><span class="t-folder">apps/web/</span></div>
+          <div class="tree-line"><span class="tree-indent">├── </span><span class="t-folder">app/</span><span class="t-comment">— Next.js App Router root</span></div>
+          <div class="tree-line"><span class="tree-indent">│   ├── </span><span class="t-important">page.tsx</span><span class="t-comment">— main rewrite interface (360px+)</span></div>
+          <div class="tree-line"><span class="tree-indent">│   ├── </span><span class="t-file">layout.tsx</span><span class="t-comment">— root layout with security headers</span></div>
+          <div class="tree-line"><span class="tree-indent">│   ├── </span><span class="t-folder">api/</span></div>
+          <div class="tree-line"><span class="tree-indent">│   │   └── </span><span class="t-folder">rewrite/</span></div>
+          <div class="tree-line"><span class="tree-indent">│   │       └── </span><span class="t-important">route.ts</span><span class="t-comment">— POST /api/rewrite → orchestrator</span></div>
+          <div class="tree-line"><span class="tree-indent">│   └── </span><span class="t-folder">legal/</span></div>
+          <div class="tree-line"><span class="tree-indent">│       ├── </span><span class="t-folder">privacy/</span><span class="t-comment">— GDPR / DPDP privacy policy</span></div>
+          <div class="tree-line"><span class="tree-indent">│       └── </span><span class="t-folder">terms/</span><span class="t-comment">— Terms of Service</span></div>
+          <div class="tree-line"><span class="tree-indent">├── </span><span class="t-folder">components/</span><span class="t-comment">— all UI components</span></div>
+          <div class="tree-line"><span class="tree-indent">│   ├── </span><span class="t-important">TonePresetSelector.tsx</span><span class="t-comment">— 5 preset buttons + platform tag</span></div>
+          <div class="tree-line"><span class="tree-indent">│   ├── </span><span class="t-important">MessageInput.tsx</span><span class="t-comment">— textarea + submit</span></div>
+          <div class="tree-line"><span class="tree-indent">│   ├── </span><span class="t-important">OutputCard.tsx</span><span class="t-comment">— streamed result + copy button</span></div>
+          <div class="tree-line"><span class="tree-indent">│   ├── </span><span class="t-important">UsageCounter.tsx</span><span class="t-comment">— progress bar (X of 10 used)</span></div>
+          <div class="tree-line"><span class="tree-indent">│   └── </span><span class="t-important">LimitReachedBanner.tsx</span><span class="t-comment">— 429 state + reset countdown</span></div>
+          <div class="tree-line"><span class="tree-indent">├── </span><span class="t-folder">e2e/</span><span class="t-comment">— Playwright end-to-end tests</span></div>
+          <div class="tree-line"><span class="tree-indent">│   └── </span><span class="t-test">rewrite.spec.ts</span><span class="t-comment">— 7 test cases</span></div>
+          <div class="tree-line"><span class="tree-indent">├── </span><span class="t-config">next.config.js</span><span class="t-comment">— security headers + config</span></div>
+          <div class="tree-line"><span class="tree-indent">├── </span><span class="t-config">playwright.config.ts</span></div>
+          <div class="tree-line"><span class="tree-indent">├── </span><span class="t-config">vitest.config.ts</span></div>
+          <div class="tree-line"><span class="tree-indent">├── </span><span class="t-config">.env.example</span><span class="t-comment">— all required env vars with comments</span></div>
+          <div class="tree-line"><span class="tree-indent">└── </span><span class="t-config">tailwind.config.ts</span></div>
+        </div>
+      </div>
+
+      <div class="tree">
+        <div class="tree-header">
+          <div class="tree-dot" style="background:#ff5c7c"></div>
+          <div class="tree-dot" style="background:#ff8c42"></div>
+          <div class="tree-dot" style="background:#00e5a0"></div>
+          <span style="font-family:var(--mono);font-size:11px;color:var(--text-2);margin-left:8px">packages/agents/</span>
+        </div>
+        <div class="tree-body">
+          <div class="tree-line"><span class="t-folder">packages/agents/</span></div>
+          <div class="tree-line"><span class="tree-indent">├── </span><span class="t-folder">src/</span></div>
+          <div class="tree-line"><span class="tree-indent">│   ├── </span><span class="t-important">orchestrator.ts</span><span class="t-comment">— ToneOrchestrator main entry</span></div>
+          <div class="tree-line"><span class="tree-indent">│   ├── </span><span class="t-folder">agents/</span></div>
+          <div class="tree-line"><span class="tree-indent">│   │   ├── </span><span class="t-file">intentClassifier.ts</span></div>
+          <div class="tree-line"><span class="tree-indent">│   │   ├── </span><span class="t-file">rewriteAgent.ts</span></div>
+          <div class="tree-line"><span class="tree-indent">│   │   ├── </span><span class="t-file">grammarAgent.ts</span></div>
+          <div class="tree-line"><span class="tree-indent">│   │   └── </span><span class="t-file">clarificationAgent.ts</span><span class="t-comment">— Mode B only</span></div>
+          <div class="tree-line"><span class="tree-indent">│   ├── </span><span class="t-folder">hooks/</span></div>
+          <div class="tree-line"><span class="tree-indent">│   │   ├── </span><span class="t-file">inputSanitizer.ts</span><span class="t-comment">— PII stripping pre-LLM</span></div>
+          <div class="tree-line"><span class="tree-indent">│   │   ├── </span><span class="t-file">languageDetector.ts</span></div>
+          <div class="tree-line"><span class="tree-indent">│   │   ├── </span><span class="t-file">lengthGuardrail.ts</span><span class="t-comment">— max 1.5x input length</span></div>
+          <div class="tree-line"><span class="tree-indent">│   │   ├── </span><span class="t-file">toneVerifier.ts</span></div>
+          <div class="tree-line"><span class="tree-indent">│   │   ├── </span><span class="t-file">ipRateLimiter.ts</span><span class="t-comment">— Upstash sliding window</span></div>
+          <div class="tree-line"><span class="tree-indent">│   │   └── </span><span class="t-file">usageLogger.ts</span><span class="t-comment">— non-blocking async</span></div>
+          <div class="tree-line"><span class="tree-indent">│   ├── </span><span class="t-folder">skills/</span></div>
+          <div class="tree-line"><span class="tree-indent">│   │   ├── </span><span class="t-file">toneMapping.ts</span><span class="t-comment">— preset → system prompt</span></div>
+          <div class="tree-line"><span class="tree-indent">│   │   ├── </span><span class="t-file">platformAwareness.ts</span></div>
+          <div class="tree-line"><span class="tree-indent">│   │   └── </span><span class="t-file">fewShotExamples.ts</span></div>
+          <div class="tree-line"><span class="tree-indent">│   └── </span><span class="t-folder">types/</span></div>
+          <div class="tree-line"><span class="tree-indent">│       └── </span><span class="t-file">index.ts</span><span class="t-comment">— shared TypeScript interfaces</span></div>
+          <div class="tree-line"><span class="tree-indent">└── </span><span class="t-test">__tests__/</span><span class="t-comment">— Vitest unit tests</span></div>
+        </div>
+      </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- S3: AGENT PIPELINE -->
+    <section class="section" id="s3">
+      <div class="section-header">
+        <span class="section-num">03</span>
+        <h2>Agent Pipeline — Logic</h2>
+      </div>
+
+      <p>Every rewrite request passes through a deterministic pipeline. Agents are called sequentially; each can short-circuit by throwing or returning early. All agents share the same <code style="font-family:var(--mono);font-size:12px;color:var(--orange)">RewriteContext</code> object passed by reference through the orchestrator.</p>
+
+      <div class="flow-wrap">
+        <div class="flow-title">// request lifecycle</div>
+        <div class="flow-row">
+          <div class="fnode user">POST /api/rewrite</div>
+          <span class="farrow">──→</span>
+          <div class="fnode hook">IPRateLimiter</div>
+          <span class="farrow">──→</span>
+          <div class="fnode hook">InputSanitizer</div>
+          <span class="farrow">──→</span>
+          <div class="fnode hook">LanguageDetector</div>
+        </div>
+        <div class="farrow-down">↓</div>
+        <div class="flow-row">
+          <div class="fnode agent">ToneOrchestrator</div>
+          <span class="farrow">──→</span>
+          <div class="fnode agent">IntentClassifier</div>
+          <span class="farrow">──→</span>
+          <div class="fnode agent">RewriteAgent</div>
+          <span class="farrow">──→</span>
+          <div class="fnode agent">GrammarAgent</div>
+        </div>
+        <div class="farrow-down">↓</div>
+        <div class="flow-row">
+          <div class="fnode hook">LengthGuardrail</div>
+          <span class="farrow">──→</span>
+          <div class="fnode hook">ToneVerifier</div>
+          <span class="farrow">──→</span>
+          <div class="fnode hook">UsageLogger</div>
+          <span class="farrow">──→</span>
+          <div class="fnode user">Stream response</div>
+        </div>
+        <p class="flow-label">// Mode B adds ClarificationAgent between IntentClassifier and RewriteAgent when needsClarification === true</p>
+      </div>
+
+      <h3>Agent Contracts (TypeScript)</h3>
+
+      <div class="code">
+        <div class="code-header">
+          <span class="code-filename">packages/agents/src/types/index.ts</span>
+          <span class="code-lang">typescript</span>
+        </div>
+        <div class="code-body">
+<span class="kw">export type</span> <span class="ty">TonePreset</span> =
+  | <span class="str">'humble-polite'</span>
+  | <span class="str">'confident-direct'</span>
+  | <span class="str">'clarifying'</span>
+  | <span class="str">'empathetic-nudge'</span>
+  | <span class="str">'grammar-only'</span>;
+
+<span class="kw">export type</span> <span class="ty">Platform</span> =
+  | <span class="str">'slack'</span> | <span class="str">'email'</span> | <span class="str">'jira'</span> | <span class="str">'linkedin'</span>;
+
+<span class="kw">export type</span> <span class="ty">Intent</span> =
+  | <span class="str">'asking'</span> | <span class="str">'escalating'</span>
+  | <span class="str">'explaining'</span> | <span class="str">'venting'</span> | <span class="str">'neutral'</span>;
+
+<span class="kw">export interface</span> <span class="ty">RewriteContext</span> {
+  original: <span class="ty">string</span>;
+  preset: <span class="ty">TonePreset</span>;
+  platform: <span class="ty">Platform</span>;
+  intent?: <span class="ty">Intent</span>;
+  needsClarification?: <span class="ty">boolean</span>;
+  clarificationAnswers?: <span class="ty">string</span>[];
+  sanitized?: <span class="ty">string</span>;    <span class="cm">// PII stripped version</span>
+  rewritten?: <span class="ty">string</span>;   <span class="cm">// output from RewriteAgent</span>
+  final?: <span class="ty">string</span>;       <span class="cm">// after grammar pass</span>
+}
+
+<span class="kw">export interface</span> <span class="ty">AgentResult</span> {
+  success: <span class="ty">boolean</span>;
+  context: <span class="ty">RewriteContext</span>;
+  error?: <span class="ty">string</span>;
+}
+        </div>
+      </div>
+
+      <div class="card-grid">
+        <div class="card purple">
+          <div class="card-type">Agent 1</div>
+          <div class="card-name">IntentClassifier</div>
+          <div class="card-desc">Reads the raw message. Returns one of 5 intent labels. Sets needsClarification=true if message is ambiguous and Mode B is requested.</div>
+          <div class="card-input">in: original, preset → out: intent, needsClarification</div>
+        </div>
+        <div class="card blue">
+          <div class="card-type">Agent 2</div>
+          <div class="card-name">RewriteAgent</div>
+          <div class="card-desc">Core rewrite. Builds system prompt from toneMapping skill + platformAwareness skill + 2–3 fewShot examples. Calls Claude Haiku with streaming.</div>
+          <div class="card-input">in: sanitized, preset, platform, intent → out: rewritten</div>
+        </div>
+        <div class="card green">
+          <div class="card-type">Agent 3</div>
+          <div class="card-name">GrammarAgent</div>
+          <div class="card-desc">Post-processing pass. Fixes spelling and punctuation. Strict instruction: do not change tone, meaning, or length. Runs on every output.</div>
+          <div class="card-input">in: rewritten → out: final</div>
+        </div>
+        <div class="card orange">
+          <div class="card-type">Agent 2b (Mode B)</div>
+          <div class="card-name">ClarificationAgent</div>
+          <div class="card-desc">Generates exactly 1–2 questions when intent is unclear. Strict output format enforced via structured prompt. Never asks more than 2.</div>
+          <div class="card-input">in: original, intent → out: questions[]</div>
+        </div>
+      </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- S4: HOOKS -->
+    <section class="section" id="s4">
+      <div class="section-header">
+        <span class="section-num">04</span>
+        <h2>Hooks Architecture</h2>
+      </div>
+
+      <p>Hooks are pure functions that run before or after agents. They never call the LLM. Pre-hooks can mutate the context or abort the pipeline. Post-hooks run after the final output is produced.</p>
+
+      <table>
+        <thead>
+          <tr><th>Hook</th><th>Stage</th><th>Can abort?</th><th>What it does</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><span style="color:var(--orange)">IPRateLimiter</span></td><td>Pre</td><td>✓ → 429</td><td>Checks Upstash Redis for IP request count in 24h window</td></tr>
+          <tr><td><span style="color:var(--orange)">InputSanitizer</span></td><td>Pre</td><td>✗</td><td>Strips email/phone/name patterns, replaces with [REDACTED_n]</td></tr>
+          <tr><td><span style="color:var(--orange)">LanguageDetector</span></td><td>Pre</td><td>✗</td><td>Detects non-English input; translates before processing</td></tr>
+          <tr><td><span style="color:var(--orange)">LengthGuardrail</span></td><td>Post</td><td>✗</td><td>If output > 1.5× input, triggers compression re-call</td></tr>
+          <tr><td><span style="color:var(--orange)">ToneVerifier</span></td><td>Post</td><td>✗</td><td>Scores output vs preset. Flags drift (logged, not blocking)</td></tr>
+          <tr><td><span style="color:var(--orange)">UsageLogger</span></td><td>Post</td><td>✗</td><td>Non-blocking async: logs hashed IP, timestamp, preset, lengths</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout orange">
+        <div class="callout-label">Important — PII Handling</div>
+        <p>InputSanitizer replaces PII with tokens like [REDACTED_1] before any LLM call. After the final output is produced, it runs a restore pass replacing tokens back with original values. Message content is never stored at any point.</p>
+      </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- S5: DATA FLOW -->
+    <section class="section" id="s5">
+      <div class="section-header">
+        <span class="section-num">05</span>
+        <h2>Data Flow & State</h2>
+      </div>
+
+      <p>ToneWise is stateless by design. No session, no database, no auth. The only persistent state is in Upstash Redis (rate limit counters) and PostHog (aggregate analytics). Everything else is ephemeral per-request.</p>
+
+      <div class="flow-wrap">
+        <div class="flow-title">// what gets stored vs what stays ephemeral</div>
+        <div class="flow-row">
+          <div class="fnode user">User's message</div>
+          <span class="farrow">──→</span>
+          <div class="fnode hook">Sanitizer</div>
+          <span class="farrow">──→</span>
+          <div class="fnode agent">LLM (ephemeral)</div>
+          <span class="farrow">──→</span>
+          <div class="fnode user">Returned to browser</div>
+        </div>
+        <div class="farrow-down">↓ (never touches disk)</div>
+        <div class="flow-row">
+          <div class="fnode hook">UsageLogger</div>
+          <span class="farrow">──→</span>
+          <div class="fnode store">Redis: hash(IP) → count</div>
+          <span class="farrow">──→</span>
+          <div class="fnode store">TTL: 24h then auto-purge</div>
+        </div>
+        <p class="flow-label">// Message content never written to any store. Only: hashed fingerprint + request count + preset label</p>
+      </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- S6: API ROUTES -->
+    <section class="section" id="s6">
+      <div class="section-header">
+        <span class="section-num">06</span>
+        <h2>API Routes</h2>
+      </div>
+
+      <table>
+        <thead>
+          <tr><th>Method</th><th>Route</th><th>Auth</th><th>Rate limited</th><th>Purpose</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><span style="color:var(--green)">POST</span></td><td>/api/rewrite</td><td>None</td><td>✓ 10/24h</td><td>Main rewrite endpoint</td></tr>
+          <tr><td><span style="color:var(--blue)">GET</span></td><td>/api/usage</td><td>None</td><td>✗</td><td>Returns remaining count for current IP</td></tr>
+        </tbody>
+      </table>
+
+      <h3>POST /api/rewrite — Request Shape</h3>
+      <div class="code">
+        <div class="code-header">
+          <span class="code-filename">Request body</span>
+          <span class="code-lang">json</span>
+        </div>
+        <div class="code-body">
+{
+  <span class="str">"message"</span>: <span class="str">"i already told you this is a bug fix it today"</span>,
+  <span class="str">"preset"</span>: <span class="str">"humble-polite"</span>,
+  <span class="str">"platform"</span>: <span class="str">"slack"</span>,
+  <span class="str">"mode"</span>: <span class="str">"quick"</span>  <span class="cm">// or "clarify"</span>
+}
+        </div>
+      </div>
+
+      <div class="code">
+        <div class="code-header">
+          <span class="code-filename">Response headers (always present)</span>
+          <span class="code-lang">http</span>
+        </div>
+        <div class="code-body">
+X-RateLimit-Limit: <span class="nu">10</span>
+X-RateLimit-Remaining: <span class="nu">7</span>
+X-RateLimit-Reset: <span class="str">2025-05-10T10:00:00Z</span>
+Content-Type: text/event-stream  <span class="cm">// streaming SSE</span>
+        </div>
+      </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- S7: EXTENSION -->
+    <section class="section" id="s7">
+      <div class="section-header">
+        <span class="section-num">07</span>
+        <h2>Browser Extension Architecture</h2>
+      </div>
+
+      <p>Built with Plasmo framework. Single codebase compiles to Chrome MV3 and Firefox MV2. The extension injects a floating button into detected text fields on supported platforms.</p>
+
+      <div class="tree">
+        <div class="tree-header">
+          <div class="tree-dot" style="background:#ff5c7c"></div>
+          <div class="tree-dot" style="background:#ff8c42"></div>
+          <div class="tree-dot" style="background:#00e5a0"></div>
+          <span style="font-family:var(--mono);font-size:11px;color:var(--text-2);margin-left:8px">apps/extension/</span>
+        </div>
+        <div class="tree-body">
+          <div class="tree-line"><span class="t-folder">apps/extension/</span></div>
+          <div class="tree-line"><span class="tree-indent">├── </span><span class="t-important">popup.tsx</span><span class="t-comment">— extension popup UI (same components as web)</span></div>
+          <div class="tree-line"><span class="tree-indent">├── </span><span class="t-important">contents/</span></div>
+          <div class="tree-line"><span class="tree-indent">│   └── </span><span class="t-important">tonewise-injector.tsx</span><span class="t-comment">— content script, detects text fields</span></div>
+          <div class="tree-line"><span class="tree-indent">├── </span><span class="t-file">background.ts</span><span class="t-comment">— service worker (MV3)</span></div>
+          <div class="tree-line"><span class="tree-indent">├── </span><span class="t-config">package.json</span></div>
+          <div class="tree-line"><span class="tree-indent">└── </span><span class="t-config">plasmo.config.ts</span></div>
+        </div>
+      </div>
+
+      <div class="callout blue">
+        <div class="callout-label">Content Script Logic</div>
+        <p>The injector listens for <code style="font-family:var(--mono);font-size:12px">focusin</code> events on <code style="font-family:var(--mono);font-size:12px">textarea</code> and <code style="font-family:var(--mono);font-size:12px">[contenteditable]</code> elements. On Slack/Gmail/Jira (matched by hostname), it injects a floating ToneWise button near the active field. Clicking the button opens a mini popup inline — no redirect to the web app needed.</p>
+      </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- S8: ENV VARS -->
+    <section class="section" id="s8">
+      <div class="section-header">
+        <span class="section-num">08</span>
+        <h2>Environment Variables</h2>
+      </div>
+
+      <p>All required in <code style="font-family:var(--mono);font-size:12px;color:var(--orange)">apps/web/.env.local</code> for local dev. Set the same keys in Vercel dashboard for production.</p>
+
+      <div style="margin:20px 0">
+        <div class="env-row" style="border-top:1px solid var(--line)">
+          <span style="color:var(--text-3);font-size:10px;letter-spacing:0.1em;text-transform:uppercase">KEY</span>
+          <span style="color:var(--text-3);font-size:10px;letter-spacing:0.1em;text-transform:uppercase">EXAMPLE VALUE</span>
+          <span style="color:var(--text-3);font-size:10px;letter-spacing:0.1em;text-transform:uppercase">WHERE TO GET IT</span>
+        </div>
+        <div class="env-row">
+          <span class="env-key">ANTHROPIC_API_KEY</span>
+          <span class="env-val">sk-ant-api03-...</span>
+          <span class="env-desc">console.anthropic.com → API Keys</span>
+        </div>
+        <div class="env-row">
+          <span class="env-key">UPSTASH_REDIS_REST_URL</span>
+          <span class="env-val">https://xxx.upstash.io</span>
+          <span class="env-desc">upstash.com → Create Database → REST URL</span>
+        </div>
+        <div class="env-row">
+          <span class="env-key">UPSTASH_REDIS_REST_TOKEN</span>
+          <span class="env-val">AXxx...</span>
+          <span class="env-desc">upstash.com → same DB → REST Token</span>
+        </div>
+        <div class="env-row">
+          <span class="env-key">NEXT_PUBLIC_APP_URL</span>
+          <span class="env-val">http://localhost:3000</span>
+          <span class="env-desc">Your deployed URL in prod</span>
+        </div>
+        <div class="env-row">
+          <span class="env-key">POSTHOG_KEY</span>
+          <span class="env-val">phc_xxx...</span>
+          <span class="env-desc">posthog.com → Project → API Key (optional)</span>
+        </div>
+      </div>
+
+      <div class="callout">
+        <div class="callout-label">Never commit .env.local</div>
+        <p>The <code style="font-family:var(--mono);font-size:12px">.env.local</code> file is in <code style="font-family:var(--mono);font-size:12px">.gitignore</code>. Only <code style="font-family:var(--mono);font-size:12px">.env.example</code> is committed — it contains placeholder values and comments but no real secrets.</p>
+      </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- S9: LOCAL SETUP -->
+    <section class="section" id="s9">
+      <div class="section-header">
+        <span class="section-num">09</span>
+        <h2>Local Dev Setup</h2>
+      </div>
+
+      <p>Full setup from a fresh clone to running UI in browser — estimated time: 8 minutes.</p>
+
+      <div class="code">
+        <div class="code-header">
+          <span class="code-filename">Terminal — one-time setup</span>
+          <span class="code-lang">bash</span>
+        </div>
+        <div class="code-body">
+<span class="cm"># 1. Clone and install</span>
+git clone https://github.com/YOUR_ORG/tonewise.git
+cd tonewise
+pnpm install          <span class="cm"># installs all workspaces</span>
+
+<span class="cm"># 2. Set up environment</span>
+cp apps/web/.env.example apps/web/.env.local
+<span class="cm"># → open .env.local and fill in your keys (see Section 08)</span>
+
+<span class="cm"># 3. Verify everything builds</span>
+pnpm typecheck        <span class="cm"># should show 0 errors</span>
+pnpm lint             <span class="cm"># should show 0 warnings</span>
+pnpm test             <span class="cm"># unit tests — should all pass</span>
+
+<span class="cm"># 4. Run the web app</span>
+cd apps/web
+pnpm dev              <span class="cm"># starts on http://localhost:3000</span>
+        </div>
+      </div>
+
+      <div class="code">
+        <div class="code-header">
+          <span class="code-filename">Terminal — E2E tests (separate tab)</span>
+          <span class="code-lang">bash</span>
+        </div>
+        <div class="code-body">
+<span class="cm"># Run this once to install browser binaries</span>
+npx playwright install
+
+<span class="cm"># Then run E2E tests (app must be running on :3000)</span>
+pnpm test:e2e
+
+<span class="cm"># Or run with UI mode for debugging</span>
+pnpm test:e2e --ui
+        </div>
+      </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- S10: TEST COVERAGE -->
+    <section class="section" id="s10">
+      <div class="section-header">
+        <span class="section-num">10</span>
+        <h2>Test Coverage Map</h2>
+      </div>
+
+      <p>What's tested, what's pending, and what Claude Code needs to verify or write.</p>
+
+      <h3>Unit Tests (Vitest) — packages/agents</h3>
+
+      <div class="test-item">
+        <div class="test-status pass">✓</div>
+        <div>
+          <div class="test-name">IntentClassifier — classifies 5 intent labels correctly</div>
+          <div class="test-file">__tests__/intentClassifier.test.ts</div>
+        </div>
+      </div>
+      <div class="test-item">
+        <div class="test-status pass">✓</div>
+        <div>
+          <div class="test-name">RewriteAgent — returns rewritten string for all 5 presets (mocked API)</div>
+          <div class="test-file">__tests__/rewriteAgent.test.ts</div>
+        </div>
+      </div>
+      <div class="test-item">
+        <div class="test-status pass">✓</div>
+        <div>
+          <div class="test-name">GrammarAgent — does not change meaning, only corrects errors</div>
+          <div class="test-file">__tests__/grammarAgent.test.ts</div>
+        </div>
+      </div>
+      <div class="test-item">
+        <div class="test-status pending">?</div>
+        <div>
+          <div class="test-name">InputSanitizer — strips email, phone, name patterns correctly</div>
+          <div class="test-file">__tests__/inputSanitizer.test.ts — needs to be written</div>
+        </div>
+      </div>
+      <div class="test-item">
+        <div class="test-status pending">?</div>
+        <div>
+          <div class="test-name">LengthGuardrail — triggers compression when output > 1.5x input</div>
+          <div class="test-file">__tests__/lengthGuardrail.test.ts — needs to be written</div>
+        </div>
+      </div>
+      <div class="test-item">
+        <div class="test-status pending">?</div>
+        <div>
+          <div class="test-name">ToneOrchestrator — full pipeline integration with mocked agents</div>
+          <div class="test-file">__tests__/orchestrator.test.ts — needs to be written</div>
+        </div>
+      </div>
+
+      <h3>E2E Tests (Playwright) — apps/web/e2e</h3>
+
+      <div class="test-item">
+        <div class="test-status pass">✓</div>
+        <div>
+          <div class="test-name">Happy path — paste message → select preset → get rewrite → copy</div>
+          <div class="test-file">e2e/rewrite.spec.ts</div>
+        </div>
+      </div>
+      <div class="test-item">
+        <div class="test-status pass">✓</div>
+        <div>
+          <div class="test-name">Rate limit — 11th request shows LimitReachedBanner with reset time</div>
+          <div class="test-file">e2e/rewrite.spec.ts</div>
+        </div>
+      </div>
+      <div class="test-item">
+        <div class="test-status pass">✓</div>
+        <div>
+          <div class="test-name">UsageCounter — decrements correctly after each request</div>
+          <div class="test-file">e2e/rewrite.spec.ts</div>
+        </div>
+      </div>
+      <div class="test-item">
+        <div class="test-status pending">?</div>
+        <div>
+          <div class="test-name">Mode B — clarification flow renders questions and accepts answers</div>
+          <div class="test-file">e2e/clarification.spec.ts — needs to be written</div>
+        </div>
+      </div>
+      <div class="test-item">
+        <div class="test-status pending">?</div>
+        <div>
+          <div class="test-name">Adversarial — prompt injection in input field is neutralised</div>
+          <div class="test-file">e2e/security.spec.ts — needs to be written</div>
+        </div>
+      </div>
+      <div class="test-item">
+        <div class="test-status pending">?</div>
+        <div>
+          <div class="test-name">All 5 tone presets × 3 platforms — output quality fixture check</div>
+          <div class="test-file">e2e/presets.spec.ts — needs to be written</div>
+        </div>
+      </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- S11: DEPLOYMENT -->
+    <section class="section" id="s11">
+      <div class="section-header">
+        <span class="section-num">11</span>
+        <h2>Deployment — Vercel</h2>
+      </div>
+
+      <p>The web app deploys to Vercel automatically on every merge to <code style="font-family:var(--mono);font-size:12px;color:var(--orange)">main</code>. The extension is built via GitHub Actions and submitted manually to Chrome Web Store and Firefox Add-ons.</p>
+
+      <div class="code">
+        <div class="code-header">
+          <span class="code-filename">.github/workflows/deploy.yml — simplified</span>
+          <span class="code-lang">yaml</span>
+        </div>
+        <div class="code-body">
+on:
+  push:
+    branches: [<span class="str">main</span>]
+
+jobs:
+  <span class="fn">ci</span>:
+    steps:
+      - pnpm install
+      - pnpm typecheck
+      - pnpm lint
+      - pnpm test          <span class="cm"># unit tests</span>
+      - pnpm test:e2e      <span class="cm"># playwright E2E</span>
+      - vercel deploy --prod  <span class="cm"># auto via Vercel GitHub integration</span>
+        </div>
+      </div>
+
+      <table>
+        <thead>
+          <tr><th>Environment</th><th>Trigger</th><th>URL</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Production</td><td>Merge to main</td><td>tonewise.app (custom domain)</td></tr>
+          <tr><td>Preview</td><td>Every PR</td><td>tonewise-git-[branch].vercel.app</td></tr>
+          <tr><td>Local</td><td>pnpm dev</td><td>localhost:3000</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+  </main>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <span>ToneWise /_docs</span>
+  <span>Technical Architecture · Built with Claude Code · v1.0</span>
+</div>
+
+</body>
+</html>

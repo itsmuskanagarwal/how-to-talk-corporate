@@ -1,4 +1,4 @@
-import type { ClarificationRequest } from '../types/index.js';
+import type { ClarificationRequest } from '../types/index';
 
 export async function clarificationAgent(_message: string): Promise<ClarificationRequest> {
   // Strict contract: never returns more than 2 questions.

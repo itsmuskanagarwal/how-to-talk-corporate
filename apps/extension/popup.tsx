@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import type { TonePreset, Platform } from '@tonewise/agents';
+import type { TonePreset, Platform } from '@how-to-talk-corporate/agents';
+import { API_BASE } from './api-base';
 
 const PRESETS: Array<{ key: TonePreset; label: string }> = [
   { key: 'humble-polite', label: 'Humble & Polite' },
@@ -25,7 +26,7 @@ export default function Popup() {
     setResult(null);
 
     try {
-      const res = await fetch('https://tonewise.vercel.app/api/rewrite', {
+      const res = await fetch(`${API_BASE}/api/rewrite`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -79,7 +80,7 @@ export default function Popup() {
           margin: '0 0 10px',
         }}
       >
-        Tone<span style={{ color: '#c84b1e' }}>Wise</span>
+        How to Talk Corporate
       </h1>
 
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4, marginBottom: 10 }}>

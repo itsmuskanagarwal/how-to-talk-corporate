@@ -1,12 +1,12 @@
 {
-  "name": "@tonewise/extension",
-  "displayName": "ToneWise",
+  "name": "@how-to-talk-corporate/extension",
+  "displayName": "How to Talk Corporate",
   "version": "0.1.0",
   "private": true,
   "description": "Rewrite Slack, email, and Jira messages with the right tone — directly in the browser.",
   "scripts": {
-    "dev": "plasmo dev",
-    "build": "plasmo build",
+    "dev": "node scripts/gen-icons.mjs && plasmo dev",
+    "build": "node scripts/gen-icons.mjs && plasmo build",
     "package": "plasmo package",
     "build:firefox": "plasmo build --target=firefox-mv2",
     "lint": "eslint . --ext .ts,.tsx",
@@ -15,8 +15,8 @@
     "test": "vitest run --passWithNoTests"
   },
   "dependencies": {
-    "@tonewise/agents": "workspace:*",
-    "plasmo": "^0.88.0",
+    "@how-to-talk-corporate/agents": "workspace:*",
+    "plasmo": "^0.90.5",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },

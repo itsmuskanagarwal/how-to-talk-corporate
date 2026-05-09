@@ -1,7 +1,7 @@
-import type { Intent, Platform, TonePreset } from '../types/index.js';
-import { getClient, DEFAULT_MODEL, extractText } from '../client.js';
-import { toneMapping } from '../skills/tone-mapping.js';
-import { platformAwareness } from '../skills/platform-awareness.js';
+import type { Intent, Platform, TonePreset } from '../types/index';
+import { getClient, DEFAULT_MODEL, extractText } from '../client';
+import { toneMapping } from '../skills/tone-mapping';
+import { platformAwareness } from '../skills/platform-awareness';
 
 export interface RewriteAgentInput {
   message: string;

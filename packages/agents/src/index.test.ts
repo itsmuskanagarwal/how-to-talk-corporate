@@ -17,9 +17,9 @@ import {
   getClient,
   setClient,
   DEFAULT_MODEL,
-} from './index.js';
+} from './index';
 
-describe('@tonewise/agents — public surface', () => {
+describe('@how-to-talk-corporate/agents — public surface', () => {
   it('exports every symbol the orchestrator pipeline depends on', () => {
     const surface = [
       toneOrchestrator,

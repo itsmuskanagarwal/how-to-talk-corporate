@@ -1,4 +1,4 @@
-# ToneWise — Extension Store Listing
+# How to Talk Corporate — Extension Store Listing
 
 ## Short description (132 chars)
 
@@ -6,7 +6,7 @@ Rewrite Slack, email, and Jira messages with the right tone in seconds. Free, no
 
 ## Full description
 
-**ToneWise** rewrites your workplace messages — Slack, Gmail, Teams, Jira, LinkedIn — with the correct tone for the context. No login. No account. 10 free rewrites a day.
+**How to Talk Corporate** rewrites your workplace messages — Slack, Gmail, Teams, Jira, LinkedIn — with the correct tone for the context. No login. No account. 10 free rewrites a day.
 
 **How it works**
 

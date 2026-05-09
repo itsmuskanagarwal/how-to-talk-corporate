@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
 
 export const metadata: Metadata = {
-  title: 'Legal — ToneWise',
+  title: 'Legal — How to Talk Corporate',
 };
 
 export default function LegalLayout({ children }: { children: ReactNode }) {

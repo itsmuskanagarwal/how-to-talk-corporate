@@ -1,4 +1,4 @@
-import { getClient, DEFAULT_MODEL, extractText } from '../client.js';
+import { getClient, DEFAULT_MODEL, extractText } from '../client';
 
 export interface LengthGuardrailOptions {
   inputLength: number;

@@ -1,4 +1,4 @@
-import type { Platform } from '../types/index.js';
+import type { Platform } from '../types/index';
 
 export interface PlatformRules {
   /** null = no cap (e.g. email). */

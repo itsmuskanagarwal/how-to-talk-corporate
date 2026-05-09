@@ -1,6 +1,7 @@
 import type { PlasmoCSConfig, PlasmoCSUIAnchor } from 'plasmo';
+import { API_BASE } from '../api-base';
 import { useState, useEffect, useCallback } from 'react';
-import type { TonePreset } from '@tonewise/agents';
+import type { TonePreset } from '@how-to-talk-corporate/agents';
 
 export const config: PlasmoCSConfig = {
   matches: [
@@ -62,7 +63,7 @@ export default function RewriteOverlay({ anchor: _anchor }: { anchor: PlasmoCSUI
     setError(null);
     setResult(null);
     try {
-      const res = await fetch('https://tonewise.vercel.app/api/rewrite', {
+      const res = await fetch(`${API_BASE}/api/rewrite`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: message.trim(), preset, platform: 'slack', mode: 'quick' }),
@@ -117,7 +118,7 @@ export default function RewriteOverlay({ anchor: _anchor }: { anchor: PlasmoCSUI
         }}
       >
         <span style={{ fontFamily: '"Fraunces", serif', fontSize: 15, fontWeight: 900 }}>
-          Tone<span style={{ color: '#c84b1e' }}>Wise</span>
+          How to Talk Corporate
         </span>
         <button
           onClick={() => setOpen(false)}

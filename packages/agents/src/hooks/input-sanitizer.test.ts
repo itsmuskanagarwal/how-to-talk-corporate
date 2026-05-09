@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { inputSanitizer, restorePlaceholders } from './input-sanitizer.js';
+import { inputSanitizer, restorePlaceholders } from './input-sanitizer';
 
 describe('inputSanitizer', () => {
   it('strips emails and round-trips them via restorePlaceholders', () => {

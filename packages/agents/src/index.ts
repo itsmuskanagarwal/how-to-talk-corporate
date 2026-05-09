@@ -1,20 +1,28 @@
-export * from './types/index.js';
+export type {
+  TonePreset,
+  Platform,
+  Intent,
+  Mode,
+  RewriteRequest,
+  RewriteResult,
+} from './types/index';
+export type { ToneScore } from './types/index';
 
-export { toneOrchestrator } from './agents/orchestrator.js';
-export { intentClassifier } from './agents/intent-classifier.js';
-export { rewriteAgent } from './agents/rewrite-agent.js';
-export { grammarAgent } from './agents/grammar-agent.js';
-export { clarificationAgent } from './agents/clarification-agent.js';
+export { toneOrchestrator } from './agents/orchestrator';
+export { intentClassifier } from './agents/intent-classifier';
+export { rewriteAgent } from './agents/rewrite-agent';
+export { grammarAgent } from './agents/grammar-agent';
+export { clarificationAgent } from './agents/clarification-agent';
 
-export { inputSanitizer, restorePlaceholders } from './hooks/input-sanitizer.js';
-export { lengthGuardrail } from './hooks/length-guardrail.js';
-export { toneVerifier } from './hooks/tone-verifier.js';
-export { languageDetector } from './hooks/language-detector.js';
+export { inputSanitizer, restorePlaceholders } from './hooks/input-sanitizer';
+export { lengthGuardrail } from './hooks/length-guardrail';
+export { toneVerifier } from './hooks/tone-verifier';
+export { languageDetector } from './hooks/language-detector';
 
-export { toneMapping } from './skills/tone-mapping.js';
-export { platformAwareness } from './skills/platform-awareness.js';
-export { culturalCalibration } from './skills/cultural-calibration.js';
-export { fewShotExamples } from './skills/few-shot-examples.js';
+export { toneMapping } from './skills/tone-mapping';
+export { platformAwareness } from './skills/platform-awareness';
+export { culturalCalibration } from './skills/cultural-calibration';
+export { fewShotExamples } from './skills/few-shot-examples';
 
-export { getClient, setClient, DEFAULT_MODEL } from './client.js';
-export type { AnthropicClient } from './client.js';
+export { getClient, setClient, DEFAULT_MODEL } from './client';
+export type { AnthropicClient } from './client';

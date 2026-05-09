@@ -1,5 +1,5 @@
-import type { Intent } from '../types/index.js';
-import { getClient, DEFAULT_MODEL, extractText } from '../client.js';
+import type { Intent } from '../types/index';
+import { getClient, DEFAULT_MODEL, extractText } from '../client';
 
 const VALID: ReadonlySet<Intent> = new Set([
   'asking',
