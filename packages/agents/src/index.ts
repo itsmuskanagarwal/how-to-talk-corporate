@@ -24,5 +24,5 @@ export { platformAwareness } from './skills/platform-awareness';
 export { culturalCalibration } from './skills/cultural-calibration';
 export { fewShotExamples } from './skills/few-shot-examples';
 
-export { getClient, setClient, DEFAULT_MODEL } from './client';
-export type { AnthropicClient } from './client';
+export { complete, setComplete, DEFAULT_MODEL } from './client';
+export { complete as llmComplete } from './lib/llmRouter';

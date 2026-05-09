@@ -1,4 +1,4 @@
-import { getClient, DEFAULT_MODEL, extractText } from '../client';
+import { complete } from '../client';
 
 const SYSTEM_PROMPT =
   'You are a grammar and spelling proofreader. Fix only typos, misspellings, ' +
@@ -8,14 +8,10 @@ const SYSTEM_PROMPT =
   'Output ONLY the corrected text. No preamble, no commentary, no markdown fencing.';
 
 export async function grammarAgent(text: string): Promise<string> {
-  const client = getClient();
-  const response = await client.messages.create({
-    model: DEFAULT_MODEL,
+  return complete({
+    system: SYSTEM_PROMPT,
+    messages: [{ role: 'user', content: text }],
     max_tokens: 1024,
     temperature: 0,
-    system: [{ type: 'text', text: SYSTEM_PROMPT, cache_control: { type: 'ephemeral' } }],
-    messages: [{ role: 'user', content: text }],
   });
-
-  return extractText(response).trim();
 }

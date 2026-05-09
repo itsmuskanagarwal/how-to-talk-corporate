@@ -1,5 +1,5 @@
 import type { Intent } from '../types/index';
-import { getClient, DEFAULT_MODEL, extractText } from '../client';
+import { complete } from '../client';
 
 const VALID: ReadonlySet<Intent> = new Set([
   'asking',
@@ -20,15 +20,14 @@ const SYSTEM_PROMPT =
   '- neutral: announcement, FYI, acknowledgement, or social pleasantry';
 
 export async function intentClassifier(message: string): Promise<Intent> {
-  const client = getClient();
-  const response = await client.messages.create({
-    model: DEFAULT_MODEL,
-    max_tokens: 16,
-    system: [{ type: 'text', text: SYSTEM_PROMPT, cache_control: { type: 'ephemeral' } }],
+  const text = await complete({
+    system: SYSTEM_PROMPT,
     messages: [{ role: 'user', content: message }],
+    max_tokens: 16,
+    temperature: 0,
   });
 
-  const raw = extractText(response)
+  const raw = text
     .trim()
     .toLowerCase()
     .replace(/[^a-z]/g, '');
