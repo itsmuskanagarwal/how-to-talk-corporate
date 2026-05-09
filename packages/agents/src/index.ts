@@ -15,3 +15,6 @@ export { toneMapping } from './skills/tone-mapping.js';
 export { platformAwareness } from './skills/platform-awareness.js';
 export { culturalCalibration } from './skills/cultural-calibration.js';
 export { fewShotExamples } from './skills/few-shot-examples.js';
+
+export { getClient, setClient, DEFAULT_MODEL } from './client.js';
+export type { AnthropicClient } from './client.js';

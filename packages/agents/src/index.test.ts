@@ -14,9 +14,12 @@ import {
   platformAwareness,
   culturalCalibration,
   fewShotExamples,
+  getClient,
+  setClient,
+  DEFAULT_MODEL,
 } from './index.js';
 
-describe('@tonewise/agents — P0 public surface', () => {
+describe('@tonewise/agents — public surface', () => {
   it('exports every symbol the orchestrator pipeline depends on', () => {
     const surface = [
       toneOrchestrator,
@@ -33,26 +36,23 @@ describe('@tonewise/agents — P0 public surface', () => {
       platformAwareness,
       culturalCalibration,
       fewShotExamples,
+      getClient,
+      setClient,
     ];
     for (const fn of surface) {
       expect(typeof fn).toBe('function');
     }
   });
 
-  it('synchronous P0 stubs throw "not implemented"', () => {
-    expect(() => inputSanitizer('hi')).toThrow(/not implemented/i);
-    expect(() => toneMapping('humble-polite')).toThrow(/not implemented/i);
-    expect(() => platformAwareness('slack')).toThrow(/not implemented/i);
-    expect(() => culturalCalibration('US')).toThrow(/not implemented/i);
-    expect(() => fewShotExamples('humble-polite', 'slack')).toThrow(/not implemented/i);
+  it('defaults to Haiku 4.5 (cheapest first-party Claude)', () => {
+    expect(DEFAULT_MODEL).toBe('claude-haiku-4-5');
   });
 
-  it('async P0 stubs reject with "not implemented"', async () => {
-    await expect(
-      toneOrchestrator({ message: 'hi', preset: 'humble-polite', platform: 'slack' }),
-    ).rejects.toThrow(/not implemented/i);
-    await expect(intentClassifier('hi')).rejects.toThrow(/not implemented/i);
-    await expect(grammarAgent('hi')).rejects.toThrow(/not implemented/i);
+  it('out-of-scope sub-agents still throw "not implemented"', async () => {
+    expect(() => culturalCalibration('US')).toThrow(/not implemented/i);
+    expect(() => fewShotExamples('humble-polite', 'slack')).toThrow(/not implemented/i);
+    await expect(clarificationAgent('hi')).rejects.toThrow(/not implemented/i);
+    await expect(toneVerifier('hi', 'humble-polite')).rejects.toThrow(/not implemented/i);
     await expect(languageDetector('hi')).rejects.toThrow(/not implemented/i);
   });
 });
