@@ -1,5 +1,31 @@
-import { useState } from 'react';
-import type { TonePreset, Platform } from '@tonewise/agents';
+import type { PlasmoCSConfig, PlasmoCSUIAnchor } from 'plasmo';
+import { useState, useEffect, useCallback } from 'react';
+import type { TonePreset } from '@tonewise/agents';
+
+export const config: PlasmoCSConfig = {
+  matches: [
+    'https://*.slack.com/*',
+    'https://mail.google.com/*',
+    'https://*.atlassian.net/*',
+    'https://teams.microsoft.com/*',
+    'https://*.linkedin.com/*',
+  ],
+  run_at: 'document_idle',
+};
+
+export const getRootContainer = () => {
+  const id = 'tonewise-overlay-root';
+  let el = document.getElementById(id);
+  if (!el) {
+    el = document.createElement('div');
+    el.id = id;
+    el.style.cssText = 'position:fixed;z-index:2147483647;bottom:16px;right:16px;';
+    document.body.appendChild(el);
+  }
+  return el;
+};
+
+export const getShadowHostId = () => 'tonewise-overlay-shadow';
 
 const PRESETS: Array<{ key: TonePreset; label: string }> = [
   { key: 'humble-polite', label: 'Humble & Polite' },
@@ -9,35 +35,40 @@ const PRESETS: Array<{ key: TonePreset; label: string }> = [
   { key: 'grammar-only', label: 'Grammar Fix Only' },
 ];
 
-export default function Popup() {
+export default function RewriteOverlay({ anchor: _anchor }: { anchor: PlasmoCSUIAnchor }) {
+  const [open, setOpen] = useState(false);
   const [message, setMessage] = useState('');
   const [preset, setPreset] = useState<TonePreset>('humble-polite');
   const [result, setResult] = useState<string | null>(null);
   const [isRewriting, setIsRewriting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
-  const [remaining, setRemaining] = useState(10);
 
-  async function handleRewrite() {
+  useEffect(() => {
+    const handler = (e: Event) => {
+      const detail = (e as CustomEvent).detail;
+      if (detail?.text) setMessage(detail.text);
+      setOpen(true);
+      setResult(null);
+      setError(null);
+    };
+    window.addEventListener('tonewise:open-overlay', handler);
+    return () => window.removeEventListener('tonewise:open-overlay', handler);
+  }, []);
+
+  const handleRewrite = useCallback(async () => {
     if (!message.trim()) return;
     setIsRewriting(true);
     setError(null);
     setResult(null);
-
     try {
       const res = await fetch('https://tonewise.vercel.app/api/rewrite', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          message: message.trim(),
-          preset,
-          platform: 'slack' as Platform,
-          mode: 'quick',
-        }),
+        body: JSON.stringify({ message: message.trim(), preset, platform: 'slack', mode: 'quick' }),
       });
-      setRemaining(Number(res.headers.get('X-RateLimit-Remaining') ?? remaining));
       if (res.status === 429) {
-        setError('Daily limit reached. Resets soon.');
+        setError('Daily limit reached.');
         setIsRewriting(false);
         return;
       }
@@ -45,10 +76,10 @@ export default function Popup() {
       const body = await res.json();
       setResult(body.rewritten);
     } catch {
-      setError('Rewrite failed. Please try again.');
+      setError('Rewrite failed.');
     }
     setIsRewriting(false);
-  }
+  }, [message, preset]);
 
   async function handleCopy() {
     if (!result) return;
@@ -57,45 +88,65 @@ export default function Popup() {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch {
-      /* clipboard unavailable */
+      /* ignore */
     }
   }
+
+  if (!open) return null;
 
   return (
     <div
       style={{
-        width: 320,
+        width: 300,
+        background: '#faf9f7',
+        borderRadius: 12,
+        boxShadow: '0 4px 24px rgba(0,0,0,0.18)',
+        border: '1px solid #e4e0d8',
         padding: 12,
         fontFamily: '"DM Sans", system-ui, sans-serif',
-        fontSize: 13,
+        fontSize: 12,
         color: '#3a3832',
       }}
     >
-      <h1
+      <div
         style={{
-          fontFamily: '"Fraunces", serif',
-          fontSize: 16,
-          fontWeight: 900,
-          margin: '0 0 10px',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          marginBottom: 8,
         }}
       >
-        Tone<span style={{ color: '#c84b1e' }}>Wise</span>
-      </h1>
+        <span style={{ fontFamily: '"Fraunces", serif', fontSize: 15, fontWeight: 900 }}>
+          Tone<span style={{ color: '#c84b1e' }}>Wise</span>
+        </span>
+        <button
+          onClick={() => setOpen(false)}
+          style={{
+            border: 'none',
+            background: 'none',
+            cursor: 'pointer',
+            fontSize: 16,
+            color: '#7a7670',
+          }}
+        >
+          &times;
+        </button>
+      </div>
 
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4, marginBottom: 10 }}>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 3, marginBottom: 8 }}>
         {PRESETS.map(({ key, label }) => (
           <button
             key={key}
             onClick={() => setPreset(key)}
             style={{
-              fontSize: 11,
-              borderRadius: 12,
+              fontSize: 10,
+              borderRadius: 10,
               border: '1px solid #e4e0d8',
-              padding: '3px 10px',
-              cursor: 'pointer',
+              padding: '2px 8px',
               background: preset === key ? '#c84b1e' : '#fff',
               color: preset === key ? '#fff' : '#3a3832',
               fontWeight: preset === key ? 600 : 400,
+              cursor: 'pointer',
             }}
           >
             {label}
@@ -107,16 +158,16 @@ export default function Popup() {
         value={message}
         onChange={(e) => setMessage(e.target.value)}
         placeholder="Paste your draft..."
-        rows={3}
+        rows={2}
         style={{
           width: '100%',
           resize: 'none',
           borderRadius: 6,
           border: '1px solid #e4e0d8',
-          padding: 8,
-          fontSize: 12,
+          padding: 6,
+          fontSize: 11,
           boxSizing: 'border-box',
-          marginBottom: 8,
+          marginBottom: 6,
         }}
         disabled={isRewriting}
       />
@@ -126,15 +177,15 @@ export default function Popup() {
         disabled={!message.trim() || isRewriting}
         style={{
           width: '100%',
-          padding: '6px 0',
+          padding: '5px 0',
           borderRadius: 6,
           border: 'none',
           background: message.trim() && !isRewriting ? '#c84b1e' : '#e4e0d8',
           color: message.trim() && !isRewriting ? '#fff' : '#7a7670',
           fontWeight: 600,
-          fontSize: 12,
+          fontSize: 11,
           cursor: message.trim() && !isRewriting ? 'pointer' : 'default',
-          marginBottom: 8,
+          marginBottom: 6,
         }}
       >
         {isRewriting ? 'Rewriting...' : 'Rewrite'}
@@ -144,11 +195,10 @@ export default function Popup() {
         <div
           style={{
             background: '#fffbeb',
-            border: '1px solid #fde68a',
             borderRadius: 6,
-            padding: 8,
-            fontSize: 11,
-            marginBottom: 8,
+            padding: 6,
+            fontSize: 10,
+            marginBottom: 6,
             color: '#92400e',
           }}
         >
@@ -157,25 +207,20 @@ export default function Popup() {
       )}
 
       {result && (
-        <div style={{ background: '#f0ede8', borderRadius: 6, padding: 10, marginBottom: 8 }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
+        <div style={{ background: '#f0ede8', borderRadius: 6, padding: 8 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
             <span
-              style={{
-                fontSize: 10,
-                fontWeight: 600,
-                color: '#c84b1e',
-                textTransform: 'uppercase',
-              }}
+              style={{ fontSize: 9, fontWeight: 600, color: '#c84b1e', textTransform: 'uppercase' }}
             >
               Result
             </span>
             <button
               onClick={handleCopy}
               style={{
-                fontSize: 10,
+                fontSize: 9,
                 border: '1px solid #e4e0d8',
-                borderRadius: 4,
-                padding: '2px 8px',
+                borderRadius: 3,
+                padding: '1px 6px',
                 background: '#fff',
                 cursor: 'pointer',
               }}
@@ -183,27 +228,11 @@ export default function Popup() {
               {copied ? 'Copied!' : 'Copy'}
             </button>
           </div>
-          <p style={{ margin: 0, fontSize: 12, lineHeight: 1.5, whiteSpace: 'pre-wrap' }}>
+          <p style={{ margin: 0, fontSize: 11, lineHeight: 1.4, whiteSpace: 'pre-wrap' }}>
             {result}
           </p>
         </div>
       )}
-
-      <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-        <div
-          style={{ flex: 1, height: 4, borderRadius: 2, background: '#e4e0d8', overflow: 'hidden' }}
-        >
-          <div
-            style={{
-              height: '100%',
-              borderRadius: 2,
-              background: '#c84b1e',
-              width: `${((10 - remaining) / 10) * 100}%`,
-            }}
-          />
-        </div>
-        <span style={{ fontSize: 10, color: '#7a7670' }}>{remaining} / 10</span>
-      </div>
     </div>
   );
 }
