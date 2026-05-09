@@ -1,4 +1,4 @@
-import { getClient, DEFAULT_MODEL, extractText } from '../client';
+import { complete } from '../client';
 
 export interface LengthGuardrailOptions {
   inputLength: number;
@@ -10,7 +10,7 @@ export interface LengthGuardrailOptions {
  * the chat presets cap at 1.5×; email-style presets pass `maxRatio: Infinity`
  * to bypass this.
  *
- * If the output exceeds the cap, ask Haiku to compress it while preserving
+ * If the output exceeds the cap, ask the LLM to compress it while preserving
  * tone and intent. The compression call is the *only* time this hook hits
  * the LLM — short outputs return immediately.
  */
@@ -22,26 +22,17 @@ export async function lengthGuardrail(
   const cap = Math.max(120, Math.floor(opts.inputLength * opts.maxRatio));
   if (output.length <= cap) return output;
 
-  const client = getClient();
-  const message = await client.messages.create({
-    model: DEFAULT_MODEL,
-    max_tokens: 512,
-    system: [
-      {
-        type: 'text',
-        text:
-          'You compress chat-message rewrites. Preserve the tone, intent, and meaning ' +
-          'exactly — only remove redundancy. Output ONLY the compressed message, no preamble.',
-        cache_control: { type: 'ephemeral' },
-      },
-    ],
+  return complete({
+    system:
+      'You compress chat-message rewrites. Preserve the tone, intent, and meaning ' +
+      'exactly — only remove redundancy. Output ONLY the compressed message, no preamble.',
     messages: [
       {
         role: 'user',
         content: `Compress this to roughly ${cap} characters while preserving tone and intent:\n\n${output}`,
       },
     ],
+    max_tokens: 512,
+    temperature: 0,
   });
-
-  return extractText(message).trim();
 }

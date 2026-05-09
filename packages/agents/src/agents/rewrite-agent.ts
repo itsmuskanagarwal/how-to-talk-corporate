@@ -1,5 +1,5 @@
 import type { Intent, Platform, TonePreset } from '../types/index';
-import { getClient, DEFAULT_MODEL, extractText } from '../client';
+import { complete } from '../client';
 import { toneMapping } from '../skills/tone-mapping';
 import { platformAwareness } from '../skills/platform-awareness';
 
@@ -38,14 +38,10 @@ export async function rewriteAgent(input: RewriteAgentInput): Promise<string> {
     'Output ONLY the rewritten message. No preamble, no commentary, no markdown fencing.',
   ].join('\n');
 
-  const client = getClient();
-  const response = await client.messages.create({
-    model: DEFAULT_MODEL,
+  return complete({
+    system: systemPrompt,
+    messages: [{ role: 'user', content: input.message }],
     max_tokens: 1024,
     temperature: 0.4,
-    system: [{ type: 'text', text: systemPrompt, cache_control: { type: 'ephemeral' } }],
-    messages: [{ role: 'user', content: input.message }],
   });
-
-  return extractText(response).trim();
 }

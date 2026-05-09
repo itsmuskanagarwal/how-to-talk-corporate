@@ -14,8 +14,8 @@ import {
   platformAwareness,
   culturalCalibration,
   fewShotExamples,
-  getClient,
-  setClient,
+  complete,
+  setComplete,
   DEFAULT_MODEL,
 } from './index';
 
@@ -36,16 +36,16 @@ describe('@how-to-talk-corporate/agents — public surface', () => {
       platformAwareness,
       culturalCalibration,
       fewShotExamples,
-      getClient,
-      setClient,
+      complete,
+      setComplete,
     ];
     for (const fn of surface) {
       expect(typeof fn).toBe('function');
     }
   });
 
-  it('defaults to Haiku 4.5 (cheapest first-party Claude)', () => {
-    expect(DEFAULT_MODEL).toBe('claude-haiku-4-5');
+  it('defaults to Gemini 2.0 Flash (free primary provider)', () => {
+    expect(DEFAULT_MODEL).toBe('gemini-2.0-flash');
   });
 
   it('out-of-scope sub-agents still throw "not implemented"', async () => {
