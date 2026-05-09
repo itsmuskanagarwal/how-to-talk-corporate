@@ -9,10 +9,13 @@ export type Platform = 'slack' | 'teams' | 'gmail' | 'outlook' | 'jira' | 'linea
 
 export type Intent = 'asking' | 'escalating' | 'explaining' | 'venting' | 'neutral';
 
+export type Mode = 'quick' | 'clarify';
+
 export interface RewriteRequest {
   message: string;
   preset: TonePreset;
   platform: Platform;
+  mode?: Mode;
   clarifications?: ClarificationAnswer[];
 }
 
