@@ -83,6 +83,45 @@ pnpm --filter @tonewise/agents test    # 13 Vitest tests with mocked Anthropic A
 | `pnpm format`    | Prettier across all source files     |
 | `pnpm build`     | Production build for every workspace |
 
+## Agent architecture
+
+The rewrite pipeline lives in [`packages/agents/`](packages/agents/) and is consumed by both the web app and the browser extension. At its core is a **ToneOrchestrator** that runs sub-agents and hooks in sequence:
+
+```
+RewriteRequest
+  → InputSanitizer      (strip PII; remember placeholders)
+  → IntentClassifier     (asking | escalating | explaining | venting | neutral)
+  → RewriteAgent         (applies tone preset + platform rules)
+  → GrammarAgent         (fixes grammar without changing tone)
+  → LengthGuardrail      (compresses output if > 1.5× input for chat presets)
+  → restorePlaceholders
+  → RewriteResult
+```
+
+Each sub-agent makes a single call to Claude Haiku 4.5 via the Anthropic SDK. The system prompt for each agent is composed from skills (`toneMapping`, `platformAwareness`, etc.) and prompt-cached for efficiency.
+
+See [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) for the full system design including rate limiting, identity fingerprinting, and edge routing.
+
+## Contributing
+
+We welcome contributions. The project follows the master spec's role-based phase model — check open issues for the current phase before starting work.
+
+### PR workflow
+
+1. Create a branch from `main` named `<phase>-<description>` (e.g. `p2-web-app-ui`)
+2. Implement your changes — the relevant workspace is one of `apps/web`, `apps/extension`, or `packages/agents`
+3. Run all checks: `pnpm typecheck && pnpm test && pnpm lint && pnpm format:check`
+4. Open a PR to `main` with a summary of what changed and why
+5. Add the PR to the corresponding GitHub Issue
+
+### Code standards
+
+- TypeScript strict mode (`noUncheckedIndexedAccess`, `exactOptionalPropertyTypes`, `verbatimModuleSyntax`)
+- No `any` — ESLint warns, PR review rejects
+- Type-only imports: `import type { X } from '...'` (enforced by `@typescript-eslint/consistent-type-imports`)
+- No `console.log` in production code (ESLint blocks everything beyond `warn`/`error`)
+- Prettier formatting enforced on commit via husky + lint-staged
+
 ## How Claude Code builds this project
 
 This project is built with [Claude Code](https://claude.ai/code) acting as every specialist role — Engineering Lead, Backend Architect, Frontend Architect, Compliance Officer, Technical Writer. Each phase follows a specific role prompt from the master product & engineering document, and roles are reflected in [`.github/CODEOWNERS`](.github/CODEOWNERS).

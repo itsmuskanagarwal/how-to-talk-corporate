@@ -61,6 +61,10 @@ export default function Page() {
           Your message content is never stored.{' '}
           <a href="/legal/privacy" className="underline hover:text-ink-2">
             Privacy Policy
+          </a>{' '}
+          &middot;{' '}
+          <a href="/legal/terms" className="underline hover:text-ink-2">
+            Terms of Service
           </a>
         </p>
       </footer>
