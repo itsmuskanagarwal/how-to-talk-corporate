@@ -7,8 +7,8 @@ const securityHeaders = [
     key: 'Content-Security-Policy',
     value: [
       "default-src 'self'",
-      "connect-src 'self' https://api.anthropic.com",
-      "script-src 'self'",
+      "connect-src 'self' https://generativelanguage.googleapis.com https://api.groq.com",
+      "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
       "style-src 'self' 'unsafe-inline'",
       "img-src 'self' data:",
     ].join('; '),
@@ -19,7 +19,7 @@ const securityHeaders = [
 
 const nextConfig = {
   reactStrictMode: true,
-  transpilePackages: ['@tonewise/agents'],
+  transpilePackages: ['@how-to-talk-corporate/agents'],
   experimental: {
     typedRoutes: true,
   },
