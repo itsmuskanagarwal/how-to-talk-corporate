@@ -4,7 +4,7 @@
   "buildCommand": "cd .. && pnpm build --filter @how-to-talk-corporate/web",
   "installCommand": "pnpm install",
   "outputDirectory": ".next",
-  "ignoreCommand": "git diff --quiet HEAD^ HEAD -- apps/web/ packages/agents/ pnpm-lock.yaml",
+  "ignoreCommand": "git rev-parse HEAD^ > /dev/null 2>&1 && git diff --quiet HEAD^ HEAD -- apps/web/ packages/agents/ pnpm-lock.yaml || true",
   "github": {
     "silent": true
   }
