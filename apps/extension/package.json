@@ -1,5 +1,5 @@
 {
-  "name": "@how-to-talk-corporate/extension",
+  "name": "@professional-message-writer/extension",
   "displayName": "How to Talk Corporate",
   "version": "0.1.0",
   "private": true,
@@ -15,7 +15,7 @@
     "test": "vitest run --passWithNoTests"
   },
   "dependencies": {
-    "@how-to-talk-corporate/agents": "workspace:*",
+    "@professional-message-writer/agents": "workspace:*",
     "plasmo": "^0.90.5",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"

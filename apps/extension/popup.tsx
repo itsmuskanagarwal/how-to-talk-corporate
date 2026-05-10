@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { TonePreset, Platform } from '@how-to-talk-corporate/agents';
+import type { TonePreset, Platform } from '@professional-message-writer/agents';
 import { API_BASE } from './api-base';
 
 const PRESETS: Array<{ key: TonePreset; label: string }> = [

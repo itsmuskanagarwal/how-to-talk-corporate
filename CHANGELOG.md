@@ -6,7 +6,7 @@
 
 - Monorepo scaffold: pnpm workspaces, strict TypeScript, ESLint + Prettier
 - Next.js 14 App Router (apps/web) and Plasmo extension shell (apps/extension)
-- Shared `@how-to-talk-corporate/agents` package with full type contract and stubs for all modules
+- Shared `@professional-message-writer/agents` package with full type contract and stubs for all modules
 - GitHub Actions: lint → typecheck → test → build + Vercel deploy workflow
 - docs/ARCHITECTURE.md with system design, pipeline contract, and phase gates
 

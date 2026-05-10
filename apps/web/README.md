@@ -1,11 +1,11 @@
-# @how-to-talk-corporate/web
+# @professional-message-writer/web
 
-The Next.js 14 App Router web client for How to Talk Corporate.
+The Next.js 14 App Router web client for Professional Message Writer.
 
 ## Develop
 
 ```bash
-pnpm --filter @how-to-talk-corporate/web dev
+pnpm --filter @professional-message-writer/web dev
 ```
 
 Open http://localhost:3000.
@@ -14,7 +14,7 @@ Open http://localhost:3000.
 
 - **P2** — Web App UI (this package). Tone presets, rewrite UI, usage counter, 429 state, accessibility audit.
 - The agent pipeline lives in [`packages/agents`](../../packages/agents).
-- The browser extension shares the same agents via the workspace dependency `@how-to-talk-corporate/agents`.
+- The browser extension shares the same agents via the workspace dependency `@professional-message-writer/agents`.
 
 ## Environment
 

@@ -1,7 +1,7 @@
-# @how-to-talk-corporate/agents
+# @professional-message-writer/agents
 
-Shared agent pipeline for How to Talk Corporate. Consumed by both `@how-to-talk-corporate/web` and
-`@how-to-talk-corporate/extension` via workspace dependency.
+Shared agent pipeline for Professional Message Writer. Consumed by both `@professional-message-writer/web` and
+`@professional-message-writer/extension` via workspace dependency.
 
 ## Phase ownership
 

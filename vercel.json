@@ -1,7 +1,7 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "nextjs",
-  "buildCommand": "cd .. && pnpm build --filter @how-to-talk-corporate/web",
+  "buildCommand": "cd .. && pnpm build --filter @professional-message-writer/web",
   "installCommand": "pnpm install",
   "outputDirectory": ".next",
   "ignoreCommand": "git rev-parse HEAD^ > /dev/null 2>&1 && git diff --quiet HEAD^ HEAD -- apps/web/ packages/agents/ pnpm-lock.yaml || true",

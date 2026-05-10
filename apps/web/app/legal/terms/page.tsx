@@ -80,8 +80,11 @@ export default function TermsPage() {
       <h2>10. Contact</h2>
       <p>
         For questions about these terms, open an issue at{' '}
-        <a href="https://github.com/itsmuskanagarwal/tonewise" className="underline">
-          github.com/itsmuskanagarwal/tonewise
+        <a
+          href="https://github.com/itsmuskanagarwal/professional-message-writer"
+          className="underline"
+        >
+          github.com/itsmuskanagarwal/professional-message-writer
         </a>
         .
       </p>

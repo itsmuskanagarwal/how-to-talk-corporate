@@ -1,6 +1,6 @@
 'use client';
 
-import type { TonePreset } from '@how-to-talk-corporate/agents';
+import type { TonePreset } from '@professional-message-writer/agents';
 import { useRewriteStore } from '../store/rewrite';
 
 const PRESETS: Array<{ key: TonePreset; label: string }> = [

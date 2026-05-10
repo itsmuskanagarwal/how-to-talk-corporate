@@ -1,7 +1,12 @@
 'use client';
 
 import { create } from 'zustand';
-import type { TonePreset, Platform, RewriteResult, Mode } from '@how-to-talk-corporate/agents';
+import type {
+  TonePreset,
+  Platform,
+  RewriteResult,
+  Mode,
+} from '@professional-message-writer/agents';
 
 export interface RewriteState {
   message: string;

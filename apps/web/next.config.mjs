@@ -19,7 +19,7 @@ const securityHeaders = [
 
 const nextConfig = {
   reactStrictMode: true,
-  transpilePackages: ['@how-to-talk-corporate/agents'],
+  transpilePackages: ['@professional-message-writer/agents'],
   experimental: {
     typedRoutes: true,
   },

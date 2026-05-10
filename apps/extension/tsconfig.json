@@ -5,8 +5,8 @@
     "noEmit": true,
     "paths": {
       "~/*": ["./*"],
-      "@how-to-talk-corporate/agents": ["../../packages/agents/src"],
-      "@how-to-talk-corporate/agents/*": ["../../packages/agents/src/*"]
+      "@professional-message-writer/agents": ["../../packages/agents/src"],
+      "@professional-message-writer/agents/*": ["../../packages/agents/src/*"]
     }
   },
   "include": [".plasmo/index.d.ts", "**/*.ts", "**/*.tsx"],

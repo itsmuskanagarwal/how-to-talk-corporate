@@ -6,8 +6,8 @@
     "plugins": [{ "name": "next" }],
     "paths": {
       "@/*": ["./*"],
-      "@how-to-talk-corporate/agents": ["../../packages/agents/src"],
-      "@how-to-talk-corporate/agents/*": ["../../packages/agents/src/*"]
+      "@professional-message-writer/agents": ["../../packages/agents/src"],
+      "@professional-message-writer/agents/*": ["../../packages/agents/src/*"]
     },
     "noEmit": true,
     "allowJs": true

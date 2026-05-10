@@ -126,8 +126,11 @@ export default function PrivacyPage() {
       <h2>8. Contact</h2>
       <p>
         If you have questions about this policy, open an issue at{' '}
-        <a href="https://github.com/itsmuskanagarwal/tonewise" className="underline">
-          github.com/itsmuskanagarwal/tonewise
+        <a
+          href="https://github.com/itsmuskanagarwal/professional-message-writer"
+          className="underline"
+        >
+          github.com/itsmuskanagarwal/professional-message-writer
         </a>
         .
       </p>

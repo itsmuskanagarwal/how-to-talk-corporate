@@ -1,7 +1,7 @@
 import type { PlasmoCSConfig, PlasmoCSUIAnchor } from 'plasmo';
 import { API_BASE } from '../api-base';
 import { useState, useEffect, useCallback } from 'react';
-import type { TonePreset } from '@how-to-talk-corporate/agents';
+import type { TonePreset } from '@professional-message-writer/agents';
 
 export const config: PlasmoCSConfig = {
   matches: [

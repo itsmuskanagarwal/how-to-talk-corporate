@@ -40,7 +40,7 @@ in `packages/agents` so both surfaces stay byte-for-byte consistent.
 ## 2. Repository layout
 
 ```
-tonewise/
+professional-message-writer/
 ├── apps/
 │   ├── web/            # Next.js 14 App Router · public client + Edge API
 │   └── extension/      # Plasmo MV3 · Chrome + Firefox
@@ -74,7 +74,7 @@ tonewise/
 | Package manager | pnpm 9 + workspaces          | Disk-efficient, deterministic, first-class monorepo |
 | Language        | TypeScript 5.5 (strict)      | One std for both surfaces                           |
 
-## 4. Pipeline contract (`@how-to-talk-corporate/agents`)
+## 4. Pipeline contract (`@professional-message-writer/agents`)
 
 ```ts
 // apps/web/app/api/rewrite/route.ts (P1, sketch only)

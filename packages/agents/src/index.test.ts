@@ -19,7 +19,7 @@ import {
   DEFAULT_MODEL,
 } from './index';
 
-describe('@how-to-talk-corporate/agents — public surface', () => {
+describe('@professional-message-writer/agents — public surface', () => {
   it('exports every symbol the orchestrator pipeline depends on', () => {
     const surface = [
       toneOrchestrator,

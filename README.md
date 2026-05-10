@@ -36,7 +36,7 @@ Without `ANTHROPIC_API_KEY`, the rewrite API returns 500. Without `UPSTASH_*` ke
 ## Repository layout
 
 ```
-tonewise/
+professional-message-writer/
 ├── apps/
 │   ├── web/              # Next.js 14 App Router (web client + Edge API)
 │   └── extension/        # Plasmo browser extension (Chrome MV3 + Firefox MV2)
@@ -52,25 +52,25 @@ tonewise/
 ### Web app
 
 ```bash
-pnpm --filter @how-to-talk-corporate/web dev       # http://localhost:3000
-pnpm --filter @how-to-talk-corporate/web test      # vitest unit tests
-pnpm --filter @how-to-talk-corporate/web test:e2e  # Playwright E2E tests (requires npx playwright install)
+pnpm --filter @professional-message-writer/web dev       # http://localhost:3000
+pnpm --filter @professional-message-writer/web test      # vitest unit tests
+pnpm --filter @professional-message-writer/web test:e2e  # Playwright E2E tests (requires npx playwright install)
 ```
 
 ### Browser extension
 
 ```bash
-pnpm --filter @how-to-talk-corporate/extension dev       # watch mode → load build/chrome-mv3-dev in Chrome
-pnpm --filter @how-to-talk-corporate/extension build      # Chrome MV3 production build
-pnpm --filter @how-to-talk-corporate/extension build:firefox  # Firefox MV2
-pnpm --filter @how-to-talk-corporate/extension package    # generate .zip for store submission
+pnpm --filter @professional-message-writer/extension dev       # watch mode → load build/chrome-mv3-dev in Chrome
+pnpm --filter @professional-message-writer/extension build      # Chrome MV3 production build
+pnpm --filter @professional-message-writer/extension build:firefox  # Firefox MV2
+pnpm --filter @professional-message-writer/extension package    # generate .zip for store submission
 ```
 
 ### Agent pipeline (shared)
 
 ```bash
-pnpm --filter @how-to-talk-corporate/agents build   # compile to dist/
-pnpm --filter @how-to-talk-corporate/agents test    # 13 Vitest tests with mocked Anthropic API
+pnpm --filter @professional-message-writer/agents build   # compile to dist/
+pnpm --filter @professional-message-writer/agents test    # 13 Vitest tests with mocked Anthropic API
 ```
 
 ### Root-level commands

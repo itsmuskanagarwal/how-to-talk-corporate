@@ -1,5 +1,5 @@
-import type { TonePreset, Platform, Mode } from '@how-to-talk-corporate/agents';
-import { toneOrchestrator } from '@how-to-talk-corporate/agents';
+import type { TonePreset, Platform, Mode } from '@professional-message-writer/agents';
+import { toneOrchestrator } from '@professional-message-writer/agents';
 import { Ratelimit } from '@upstash/ratelimit';
 import { Redis } from '@upstash/redis';
 
@@ -14,7 +14,7 @@ const ratelimit = new Ratelimit({
   redis: Redis.fromEnv(),
   limiter: Ratelimit.slidingWindow(10, '24 h'),
   analytics: true,
-  prefix: 'tonewise',
+  prefix: 'professional-message-writer',
 });
 
 export async function POST(req: Request): Promise<Response> {

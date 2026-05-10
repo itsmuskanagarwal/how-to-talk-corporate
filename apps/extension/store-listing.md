@@ -31,7 +31,7 @@ Rewrite Slack, email, and Jira messages with the right tone in seconds. Free, no
 - **10 free rewrites every 24 hours** — enough for daily use
 - **Inline on any page** — floating button appears when you focus a text field
 - **Platform-aware** — output is calibrated for Slack (short), email (full structure), or Jira (action-oriented)
-- **Your data stays private** — message content is never stored. See our [Privacy Policy](https://tonewise.vercel.app/legal/privacy).
+- **Your data stays private** — message content is never stored. See our [Privacy Policy](https://professional-message-writer.vercel.app/legal/privacy).
 
 **Supported platforms**
 

@@ -12,7 +12,7 @@ export default defineConfig({
     trace: 'on-first-retry',
   },
   webServer: {
-    command: 'pnpm --filter @how-to-talk-corporate/web dev',
+    command: 'pnpm --filter @professional-message-writer/web dev',
     url: 'http://localhost:3000',
     reuseExistingServer: !process.env['CI'],
     timeout: 30_000,
