@@ -5,6 +5,9 @@
   "installCommand": "pnpm install",
   "outputDirectory": ".next",
   "ignoreCommand": "! git diff HEAD^ HEAD --quiet -- apps/web/ packages/agents/ pnpm-lock.yaml 2>/dev/null || [ -z \"$(git rev-parse HEAD^ 2>/dev/null)\" ]",
+  "env": {
+    "NODE_ENV": "production"
+  },
   "github": {
     "silent": true
   }
